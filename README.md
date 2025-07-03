@@ -14,7 +14,7 @@
             font-family: 'Inter', sans-serif;
         }
         .card {
-            background-color: black;
+            background-color: grey ;
             border-radius: 0.75rem;
             padding: 1.5rem;
             box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
@@ -33,7 +33,7 @@
         .status-badge {
             padding: 0.25rem 0.75rem;
             border-radius: 9999px;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 0.875rem;
         }
     </style>
