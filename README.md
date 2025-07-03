@@ -14,7 +14,7 @@
             font-family: 'Inter', sans-serif;
         }
         .card {
-            background-color: white;
+            background-color: black;
             border-radius: 0.75rem;
             padding: 1.5rem;
             box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
