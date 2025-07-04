@@ -68,7 +68,7 @@
             border-color: #6366f1 !important; /* focus:border-indigo-500 */
             --tw-ring-color: #6366f1 !important; /* focus:ring-indigo-500 */
         }
-        /* Gaya untuk tabel hasil */
+        /* Gaya untuk tabel hasil yang lebih jelas */
         .result-table th {
             color: #94a3b8; /* slate-400 */
             font-weight: 600;
@@ -79,9 +79,18 @@
             color: #cbd5e1; /* slate-300 */
         }
         .result-table .value-cell {
-            color: #f1f5f9; /* slate-100 */
+            color: #ffffff; /* Putih terang untuk nilai */
             font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-            font-weight: 600;
+            font-weight: 700; /* Lebih tebal */
+        }
+        .result-table .unit-cell {
+            color: #64748b; /* slate-500, lebih redup untuk satuan */
+        }
+        .result-table tr {
+            border-bottom: 1px solid #334155; /* Garis batas lebih jelas */
+        }
+        .result-table tr:last-child {
+            border-bottom: none;
         }
         .result-table tr:hover td {
             background-color: rgba(255, 255, 255, 0.05);
@@ -203,45 +212,45 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="border-b border-slate-700">
+                            <tr>
                                 <td class="p-3">Pertambahan Bobot</td>
                                 <td id="hasil-pertambahan-bobot-value" class="p-3 text-right value-cell"></td>
-                                <td id="hasil-pertambahan-bobot-unit" class="p-3 text-right"></td>
+                                <td id="hasil-pertambahan-bobot-unit" class="p-3 text-right unit-cell"></td>
                             </tr>
-                            <tr class="border-b border-slate-700">
+                            <tr>
                                 <td class="p-3">Rasio Konversi Pakan (FCR)</td>
                                 <td id="hasil-fcr-value" class="p-3 text-right value-cell"></td>
-                                <td id="hasil-fcr-unit" class="p-3 text-right"></td>
+                                <td id="hasil-fcr-unit" class="p-3 text-right unit-cell"></td>
                             </tr>
-                            <tr class="border-b border-slate-700">
+                            <tr>
                                 <td class="p-3">Efisiensi Pakan (EP)</td>
                                 <td id="hasil-ep-value" class="p-3 text-right value-cell"></td>
-                                <td id="hasil-ep-unit" class="p-3 text-right"></td>
+                                <td id="hasil-ep-unit" class="p-3 text-right unit-cell"></td>
                             </tr>
-                            <tr class="border-b border-slate-700">
+                            <tr>
                                 <td class="p-3">Survival Rate (SR)</td>
                                 <td id="hasil-sr-value" class="p-3 text-right value-cell"></td>
-                                <td id="hasil-sr-unit" class="p-3 text-right"></td>
+                                <td id="hasil-sr-unit" class="p-3 text-right unit-cell"></td>
                             </tr>
-                            <tr class="border-b border-slate-700">
+                            <tr>
                                 <td class="p-3">Specific Growth Rate (SGR)</td>
                                 <td id="hasil-sgr-value" class="p-3 text-right value-cell"></td>
-                                <td id="hasil-sgr-unit" class="p-3 text-right"></td>
+                                <td id="hasil-sgr-unit" class="p-3 text-right unit-cell"></td>
                             </tr>
-                            <tr class="border-b border-slate-700">
+                            <tr>
                                 <td class="p-3">Pertumbuhan Rata-rata</td>
                                 <td id="hasil-pertumbuhan-rata-value" class="p-3 text-right value-cell"></td>
-                                <td id="hasil-pertumbuhan-rata-unit" class="p-3 text-right"></td>
+                                <td id="hasil-pertumbuhan-rata-unit" class="p-3 text-right unit-cell"></td>
                             </tr>
-                            <tr class="border-b border-slate-700">
+                            <tr>
                                 <td class="p-3">Bobot Rata-rata Panen</td>
                                 <td id="hasil-bobot-rata-panen-value" class="p-3 text-right value-cell"></td>
-                                <td id="hasil-bobot-rata-panen-unit" class="p-3 text-right"></td>
+                                <td id="hasil-bobot-rata-panen-unit" class="p-3 text-right unit-cell"></td>
                             </tr>
                             <tr>
                                 <td class="p-3 rounded-bl-lg">Pertumbuhan Harian (ADG)</td>
                                 <td id="hasil-adg-value" class="p-3 text-right value-cell"></td>
-                                <td id="hasil-adg-unit" class="p-3 text-right rounded-br-lg"></td>
+                                <td id="hasil-adg-unit" class="p-3 text-right rounded-br-lg unit-cell"></td>
                             </tr>
                         </tbody>
                     </table>
