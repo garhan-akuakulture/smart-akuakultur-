@@ -41,6 +41,15 @@
             box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
             border-color: rgba(255, 255, 255, 0.2);
         }
+        .input-icon {
+            position: absolute;
+            inset-y: 0;
+            left: 0;
+            display: flex;
+            align-items: center;
+            padding-left: 0.75rem; /* 12px */
+            color: #94a3b8; /* slate-400 */
+        }
         .main-button {
             display: flex;
             align-items: center;
@@ -231,16 +240,7 @@
                 <!-- Rekomendasi Pakan SNI -->
                 <div id="rekomendasi-pakan-container" class="bg-slate-800/50 p-4 rounded-lg">
                     <p class="text-lg font-semibold text-slate-200">Rekomendasi Pakan Harian (SNI)</p>
-                    <div class="mt-3 space-y-4">
-                        <div>
-                            <label for="current_biomass" class="block text-sm font-medium mb-1">Total Biomassa Ikan Saat Ini</label>
-                            <input type="number" id="current_biomass" placeholder="Masukkan total bobot ikan saat ini" class="mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
-                        </div>
-                        <button id="recommend-btn" class="main-button w-full bg-teal-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-teal-700 transition-all duration-200">
-                           Dapatkan Rekomendasi
-                        </button>
-                    </div>
-                    <div id="recommendation-output" class="mt-4 space-y-1 text-sm" style="display: none;">
+                    <div id="recommendation-output" class="mt-2 space-y-1 text-sm">
                         <p>Bobot Rata-rata Ikan: <span id="rekomendasi-bobot-rata" class="font-bold"></span></p>
                         <p>Persentase Pakan: <span id="rekomendasi-persentase" class="font-bold"></span> dari biomassa</p>
                         <p>Jumlah Pakan Harian: <span id="rekomendasi-jumlah-pakan" class="font-bold"></span></p>
@@ -411,11 +411,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const elements = {
         calculateBtn: document.getElementById('calculate-btn'),
         planBtn: document.getElementById('plan-btn'),
-        recommendBtn: document.getElementById('recommend-btn'),
         resultContainer: document.getElementById('result-container'),
         errorMessage: document.getElementById('error-message'),
         planningResultEl: document.getElementById('planning-result'),
-        recommendationOutput: document.getElementById('recommendation-output'),
         inputs: {
             fishType: document.getElementById('fish_type'),
             weightUnit: document.getElementById('weight_unit'),
@@ -426,7 +424,6 @@ document.addEventListener('DOMContentLoaded', () => {
             jumlahBibitAwal: document.getElementById('jumlah_bibit_awal'),
             jumlahIkanPanen: document.getElementById('jumlah_ikan_panen'),
             targetFcr: document.getElementById('target_fcr'),
-            currentBiomass: document.getElementById('current_biomass'),
         },
         outputs: {
             pertambahanBobot: document.getElementById('hasil-pertambahan-bobot'),
@@ -480,51 +477,7 @@ document.addEventListener('DOMContentLoaded', () => {
         appState.totalPakan = inputsInGrams.totalPakan;
         appState.unit = unit;
         
-        updateUI(results, unit);
-    };
-
-    const handleRecommendation = () => {
-        const unit = elements.inputs.weightUnit.value;
-        const fishType = elements.inputs.fishType.value;
-        const conversionFactor = unit === 'kg' ? 1000 : 1;
-
-        const currentBiomass = parseFloat(elements.inputs.currentBiomass.value);
-        const fishCount = parseInt(elements.inputs.jumlahIkanPanen.value) || parseInt(elements.inputs.jumlahBibitAwal.value);
-
-        if (isNaN(currentBiomass) || isNaN(fishCount) || currentBiomass <= 0 || fishCount <= 0) {
-            alert("Masukkan Total Biomassa Saat Ini dan pastikan data jumlah ikan sudah terisi.");
-            return;
-        }
-
-        const currentBiomassInGrams = currentBiomass * conversionFactor;
-        const avgWeightInGrams = currentBiomassInGrams / fishCount;
-        const selectedSni = sniData[fishType];
-        let feedPercentMin, feedPercentMax, percentText;
-
-        for (const range of selectedSni.ranges) {
-            if (avgWeightInGrams < range.limit) {
-                feedPercentMin = range.min;
-                feedPercentMax = range.max;
-                percentText = (feedPercentMin === feedPercentMax) ? `${feedPercentMin}%` : `${range.min}% - ${range.max}%`;
-                break;
-            }
-        }
-
-        const minFeed = currentBiomassInGrams * (feedPercentMin / 100);
-        const maxFeed = currentBiomassInGrams * (feedPercentMax / 100);
-        
-        let displayMinFeed = minFeed;
-        let displayMaxFeed = maxFeed;
-        if (unit === 'kg') {
-            displayMinFeed /= 1000;
-            displayMaxFeed /= 1000;
-        }
-
-        document.getElementById('rekomendasi-bobot-rata').textContent = `${avgWeightInGrams.toFixed(2)} g/ekor`;
-        document.getElementById('rekomendasi-persentase').textContent = percentText;
-        document.getElementById('rekomendasi-jumlah-pakan').textContent = `${displayMinFeed.toFixed(2)} - ${displayMaxFeed.toFixed(2)} ${unit}/hari`;
-        
-        elements.recommendationOutput.style.display = 'block';
+        updateUI(results, unit, inputsInGrams.bobotPanen, inputs.jumlahIkanPanen, fishType);
     };
 
     const validateInputs=(i)=>{if(Object.values(i).some(isNaN))return"Semua kolom harus diisi angka.";if(i.totalPakan<=0||i.jumlahBibitAwal<=0||i.lamaBudidaya<=0)return"Pakan, bibit awal, dan lama budidaya harus > 0.";if(i.bobotPanen<=i.bobotAwal)return"Bobot panen harus > bobot awal.";if(i.jumlahIkanPanen>i.jumlahBibitAwal)return"Ikan panen tidak boleh > bibit awal.";return null;};
@@ -546,7 +499,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const displayStatus=(el,t,bg,c)=>{el.innerHTML=`<span class="status-badge" style="background-color:${bg};color:${c};">${t}</span>`;};
     
-    const updateUI=(r, unit)=>{
+    const updateUI=(r, unit, totalBiomassInGrams, fishCount, fishType)=>{
         let displayWeight = r.pertambahanBobot;
         let displayPertumbuhanRata = r.pertumbuhanRata;
         if (unit === 'kg') {
@@ -563,6 +516,34 @@ document.addEventListener('DOMContentLoaded', () => {
         elements.outputs.bobotRataPanen.textContent = `${r.bobotRataPanen.toFixed(2)} g/ekor`;
         elements.outputs.adg.textContent = `${r.adg.toFixed(2)} g/ekor/hari`;
         
+        // Auto-calculate recommendation on main calculation
+        const avgWeightInGrams = totalBiomassInGrams / fishCount;
+        const selectedSni = sniData[fishType];
+        let feedPercentMin, feedPercentMax, percentText;
+
+        for (const range of selectedSni.ranges) {
+            if (avgWeightInGrams < range.limit) {
+                feedPercentMin = range.min;
+                feedPercentMax = range.max;
+                percentText = (feedPercentMin === feedPercentMax) ? `${feedPercentMin}%` : `${range.min}% - ${range.max}%`;
+                break;
+            }
+        }
+
+        const minFeed = totalBiomassInGrams * (feedPercentMin / 100);
+        const maxFeed = totalBiomassInGrams * (feedPercentMax / 100);
+        
+        let displayMinFeed = minFeed;
+        let displayMaxFeed = maxFeed;
+        if (unit === 'kg') {
+            displayMinFeed /= 1000;
+            displayMaxFeed /= 1000;
+        }
+
+        document.getElementById('rekomendasi-bobot-rata').textContent = `${avgWeightInGrams.toFixed(2)} g/ekor`;
+        document.getElementById('rekomendasi-persentase').textContent = percentText;
+        document.getElementById('rekomendasi-jumlah-pakan').textContent = `${displayMinFeed.toFixed(2)} - ${displayMaxFeed.toFixed(2)} ${unit}/hari`;
+        
         const statusFcrEl = document.getElementById('status-fcr');
         const statusSrEl = document.getElementById('status-sr');
         if (statusFcrEl) statusFcrEl.innerHTML = '';
@@ -571,7 +552,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if(r.fcr>0&&r.fcr<1.0)displayStatus(statusFcrEl,'🟢 FCR Sangat Efisien','#dcfce7','#166534');
         else if(r.fcr<=1.2)displayStatus(statusFcrEl,'🔵 FCR Efisien','#dbeafe','#1e40af');
         else if(r.fcr<=1.5)displayStatus(statusFcrEl,'🟡 FCR Cukup Efisien','#fef9c3','#854d0e');
-        else displayStatus(statusFcrEl,'� FCR Kurang Efisien','#fee2e2','#991b1b');
+        else displayStatus(statusFcrEl,'🔴 FCR Kurang Efisien','#fee2e2','#991b1b');
         
         if(r.sr>=80)displayStatus(statusSrEl,'✅ SR Berhasil (di atas 80%)','#dcfce7','#166534');
         else displayStatus(statusSrEl,'⚠️ SR Perlu Evaluasi (di bawah 80%)','#fef9c3','#854d0e');
@@ -609,11 +590,9 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     elements.calculateBtn.addEventListener('click', handleCalculation);
-    elements.recommendBtn.addEventListener('click', handleRecommendation);
     elements.planBtn.addEventListener('click', handlePlanning);
 });
 </script>
 
 </body>
 </html>
-�
