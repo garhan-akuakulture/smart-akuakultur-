@@ -1,8 +1,73 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Analisis Panen</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Gaya tambahan untuk UI yang lebih baik */
+        body { 
+            background-color: #f1f5f9; 
+            font-family: 'Inter', sans-serif; 
+        }
+        .card { 
+            background-color: white; 
+            border-radius: 0.75rem; 
+            padding: 2rem; 
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); 
+            transition: transform 0.2s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .result-item { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 0.75rem 0; 
+            border-bottom: 1px solid #e5e7eb; 
+        }
+        .result-item:last-child { 
+            border-bottom: none; 
+        }
+        .status-badge { 
+            display:inline-block; 
+            padding: 0.5rem 1rem; 
+            border-radius: 9999px; 
+            font-weight: 600; 
+            font-size: 0.875rem;
+        }
+        /* Style untuk notifikasi */
+        #notification { 
+            position: fixed; 
+            bottom: -100px; /* Mulai dari luar layar */
+            left: 50%; 
+            transform: translateX(-50%); 
+            padding: 12px 24px; 
+            border-radius: 8px; 
+            color: white; 
+            font-weight: bold; 
+            z-index: 1000; 
+            opacity: 0; 
+            transition: opacity 0.5s, bottom 0.5s; 
+        }
+        #notification.show { 
+            opacity: 1; 
+            bottom: 20px; /* Muncul ke dalam layar */
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="p-4 md:p-8">
+<div class="max-w-6xl mx-auto">
+    <h1 class="text-4xl font-extrabold text-center text-slate-800 mb-8">Kalkulator Analisis & Perencanaan Panen</h1>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <!-- Kolom Input -->
         <div class="card">
             <h2 class="text-2xl font-bold text-gray-700 mb-6 border-b pb-3">Data Siklus Panen</h2>
-            
             <div class="space-y-4">
                 <div>
                     <label for="bobot_awal_tebar" class="block text-sm font-medium text-gray-700">Total Bobot Awal (kg)</label>
@@ -25,9 +90,8 @@
                     <input type="number" id="jumlah_ikan_panen" placeholder="Contoh: 950" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                 </div>
             </div>
-
-            <button id="calculate-btn" class="mt-8 w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-transform transform hover:scale-105">
-                Hitung Analisis
+            <button id="calculate-btn" class="mt-8 w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-transform transform hover:scale-105 disabled:bg-indigo-400 disabled:cursor-not-allowed">
+                Hitung & Simpan Analisis
             </button>
         </div>
 
@@ -53,17 +117,16 @@
                         <span id="hasil-sr" class="font-bold text-lg text-gray-800"></span>
                     </div>
                 </div>
-                
                 <div id="status-fcr" class="mt-4 text-center"></div>
                 <div id="status-sr" class="mt-2 text-center"></div>
             </div>
 
             <div class="card">
                 <h2 class="text-2xl font-bold text-gray-700 mb-4 border-b pb-3">Perencanaan Pakan</h2>
-                 <div>
+                <div>
                     <label for="target_fcr" class="block text-sm font-medium text-gray-700">Masukkan Target FCR Baru:</label>
                     <div class="flex space-x-2 mt-1">
-                        <input type="number" id="target_fcr" value="1.3" class="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        <input type="number" id="target_fcr" value="1.2" step="0.1" class="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                         <button id="plan-btn" class="px-4 py-2 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700">Rencanakan</button>
                     </div>
                 </div>
@@ -72,109 +135,131 @@
         </div>
     </div>
     <div id="error-message" class="mt-6 text-center text-red-600 font-semibold"></div>
+    <!-- Elemen untuk Notifikasi -->
+    <div id="notification"></div>
 </div>
 
 <script>
-    // --- Ambil Elemen dari DOM ---
-    const calculateBtn = document.getElementById('calculate-btn');
-    const planBtn = document.getElementById('plan-btn');
-    const resultContainer = document.getElementById('result-container');
-    const errorMessage = document.getElementById('error-message');
+document.addEventListener('DOMContentLoaded', () => {
+
+    // URL WEB APP ANDA SUDAH DIMASUKKAN DI SINI
     const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxYTVTySvme1I2dH1m8mmDtgmVwia9dAjd6ve0FsA2PQkQB-rThJG3XzcFxGis7D40k/exec';
 
-    let currentPertambahanBobot = 0;
-    let currentTotalPakan = 0;
-
-    // --- Fungsi untuk Menampilkan Status dengan Warna ---
-    function displayStatus(elementId, text, bgColor, textColor) {
-        const el = document.getElementById(elementId);
-        el.innerHTML = `<span class="status-badge" style="background-color:${bgColor}; color:${textColor};">${text}</span>`;
-    }
-
-    // --- Fungsi Utama untuk Analisis ---
-    calculateBtn.addEventListener('click', () => {
-        // Reset state
-        errorMessage.textContent = '';
-        resultContainer.style.display = 'none';
-        document.getElementById('planning-result').style.display = 'none';
-
-        // Ambil nilai dari input
-        const bobot_awal_tebar = parseFloat(document.getElementById('bobot_awal_tebar').value);
-        const total_pakan = parseFloat(document.getElementById('total_pakan').value);
-        const bobot_panen = parseFloat(document.getElementById('bobot_panen').value);
-        const jumlah_bibit_awal = parseInt(document.getElementById('jumlah_bibit_awal').value);
-        const jumlah_ikan_panen = parseInt(document.getElementById('jumlah_ikan_panen').value);
-
-        // Validasi input
-        if (isNaN(bobot_awal_tebar) || isNaN(total_pakan) || isNaN(bobot_panen) || isNaN(jumlah_bibit_awal) || isNaN(jumlah_ikan_panen) ||
-            total_pakan <= 0 || bobot_panen <= bobot_awal_tebar || jumlah_bibit_awal <= 0 || jumlah_ikan_panen > jumlah_bibit_awal) {
-            errorMessage.textContent = 'Error: Data tidak valid. Periksa kembali semua input Anda.';
-            return;
+    // KUMPULKAN SEMUA ELEMEN DOM
+    const elements = {
+        calculateBtn: document.getElementById('calculate-btn'),
+        planBtn: document.getElementById('plan-btn'),
+        resultContainer: document.getElementById('result-container'),
+        errorMessage: document.getElementById('error-message'),
+        notification: document.getElementById('notification'),
+        planningResultEl: document.getElementById('planning-result'),
+        inputs: {
+            bobotAwal: document.getElementById('bobot_awal_tebar'),
+            totalPakan: document.getElementById('total_pakan'),
+            bobotPanen: document.getElementById('bobot_panen'),
+            jumlahBibitAwal: document.getElementById('jumlah_bibit_awal'),
+            jumlahIkanPanen: document.getElementById('jumlah_ikan_panen'),
+            targetFcr: document.getElementById('target_fcr'),
+        },
+        outputs: {
+            pertambahanBobot: document.getElementById('hasil-pertambahan-bobot'),
+            fcr: document.getElementById('hasil-fcr'),
+            ep: document.getElementById('hasil-ep'),
+            sr: document.getElementById('hasil-sr'),
+            statusFcr: document.getElementById('status-fcr'),
+            statusSr: document.getElementById('status-sr'),
         }
-
-        // Perhitungan
-        const pertambahan_bobot = bobot_panen - bobot_awal_tebar;
-        const fcr = pertambahan_bobot > 0 ? total_pakan / pertambahan_bobot : 0;
-        const efisiensi_pakan = total_pakan > 0 ? (pertambahan_bobot / total_pakan) * 100 : 0;
-        const survival_rate = (jumlah_ikan_panen / jumlah_bibit_awal) * 100;
-        
-        // Simpan variabel untuk perencanaan
-        currentPertambahanBobot = pertambahan_bobot;
-        currentTotalPakan = total_pakan;
-
-        // Tampilkan hasil
-        document.getElementById('hasil-pertambahan-bobot').textContent = `${pertambahan_bobot.toFixed(2)} kg`;
-        document.getElementById('hasil-fcr').textContent = fcr.toFixed(2);
-        document.getElementById('hasil-ep').textContent = `${efisiensi_pakan.toFixed(2)} %`;
-        document.getElementById('hasil-sr').textContent = `${survival_rate.toFixed(2)} %`;
-
-        // Tampilkan interpretasi FCR
-        if (fcr > 0 && fcr < 1.0) {
-            displayStatus('status-fcr', '🟢 FCR Sangat Efisien', '#dcfce7', '#166534');
-        } else if (fcr >= 1.0 && fcr <= 1.2) {
-            displayStatus('status-fcr', '🔵 FCR Efisien', '#dbeafe', '#1e40af');
-        } else if (fcr > 1.2 && fcr <= 1.5) {
-            displayStatus('status-fcr', '🟡 FCR Cukup Efisien', '#fef9c3', '#854d0e');
-        } else {
-            displayStatus('status-fcr', '🔴 FCR Kurang Efisien', '#fee2e2', '#991b1b');
-        }
-
-        // Tampilkan interpretasi SR
-        if (survival_rate >= 80) {
-            displayStatus('status-sr', '✅ SR Berhasil (di atas 80%)', '#dcfce7', '#166534');
-        } else {
-            displayStatus('status-sr', '⚠️ SR Perlu Evaluasi (di bawah 80%)', '#fef9c3', '#854d0e');
-        }
-
-        resultContainer.style.display = 'block';
-    });
+    };
+    const appState = { pertambahanBobot: 0, totalPakan: 0 };
     
-    // --- Fungsi untuk Perencanaan ---
-    planBtn.addEventListener('click', () => {
-        const planningResultEl = document.getElementById('planning-result');
-        const target_fcr = parseFloat(document.getElementById('target_fcr').value);
+    // FUNGSI UNTUK NOTIFIKASI
+    const showNotification = (message, isSuccess) => {
+        elements.notification.textContent = message;
+        elements.notification.style.backgroundColor = isSuccess ? '#22c55e' : '#ef4444';
+        elements.notification.classList.add('show');
+        setTimeout(() => {
+            elements.notification.classList.remove('show');
+        }, 3000);
+    };
 
-        if (isNaN(target_fcr) || target_fcr <= 0 || currentPertambahanBobot <= 0) {
-            planningResultEl.innerHTML = `<p class="text-red-600">Masukkan target FCR yang valid dan hitung analisis terlebih dahulu.</p>`;
-            planningResultEl.style.display = 'block';
+    // FUNGSI UNTUK MENGIRIM DATA KE GOOGLE SHEET
+    const sendDataToGoogleSheet = async (inputs, results) => {
+        // Gabungkan data input dan hasil kalkulasi menjadi satu objek
+        const payload = { ...inputs, ...results };
+        
+        try {
+            const response = await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'cors', // Diperlukan untuk request lintas domain
+                headers: { 
+                    'Content-Type': 'text/plain;charset=utf-8', // Tipe konten yang diterima Apps Script
+                },
+                body: JSON.stringify(payload) // Kirim data sebagai string JSON
+            });
+            const result = await response.json();
+            if (result.status === 'sukses') {
+                showNotification('✅ Data berhasil tersimpan di Google Sheet!', true);
+            } else {
+                throw new Error(result.message);
+            }
+        } catch (error) {
+            console.error('Error saat mengirim ke Google Sheet:', error);
+            showNotification(`❌ Gagal menyimpan data. Error: ${error.message}`, false);
+        }
+    };
+
+    // FUNGSI UTAMA KALKULASI
+    const handleCalculation = async () => {
+        // Reset pesan error dan nonaktifkan tombol untuk mencegah klik ganda
+        elements.errorMessage.textContent = '';
+        elements.calculateBtn.disabled = true;
+        elements.calculateBtn.textContent = 'Memproses...';
+
+        const inputs = {
+            bobotAwal: parseFloat(elements.inputs.bobotAwal.value),
+            totalPakan: parseFloat(elements.inputs.totalPakan.value),
+            bobotPanen: parseFloat(elements.inputs.bobotPanen.value),
+            jumlahBibitAwal: parseInt(elements.inputs.jumlahBibitAwal.value),
+            jumlahIkanPanen: parseInt(elements.inputs.jumlahIkanPanen.value),
+        };
+        
+        // Validasi input
+        const validationError = validateInputs(inputs);
+        if (validationError) {
+            elements.errorMessage.textContent = `Error: ${validationError}`;
+            elements.calculateBtn.disabled = false;
+            elements.calculateBtn.textContent = 'Hitung & Simpan Analisis';
             return;
         }
 
-        const pakan_ideal = currentPertambahanBobot * target_fcr;
-        const selisih_pakan = currentTotalPakan - pakan_ideal;
+        // Lakukan kalkulasi
+        const results = calculateMetrics(inputs);
+        appState.pertambahanBobot = results.pertambahanBobot;
+        appState.totalPakan = inputs.totalPakan;
         
-        let resultHTML = `<p>Dengan target FCR <strong>${target_fcr.toFixed(2)}</strong>, pakan yang dibutuhkan adalah <strong>${pakan_ideal.toFixed(2)} kg</strong>.</p>`;
-        
-        if (selisih_pakan > 0) {
-            resultHTML += `<p class="mt-2 font-semibold text-green-700">Anda bisa HEMAT pakan sebanyak ${selisih_pakan.toFixed(2)} kg.</p>`;
-        } else if (selisih_pakan < 0) {
-            resultHTML += `<p class="mt-2 font-semibold text-yellow-700">Target ini lebih baik dari FCR Anda saat ini. Terus tingkatkan efisiensi!</p>`;
-        } else {
-            resultHTML += `<p class="mt-2 font-semibold">Target FCR sama dengan yang sudah dicapai.</p>`;
-        }
+        // Perbarui tampilan UI
+        updateUI(results);
 
-        planningResultEl.innerHTML = resultHTML;
-        planningResultEl.style.display = 'block';
-    });
+        // KIRIM DATA SETELAH KALKULASI BERHASIL
+        await sendDataToGoogleSheet(inputs, results);
 
+        // Aktifkan kembali tombol
+        elements.calculateBtn.disabled = false;
+        elements.calculateBtn.textContent = 'Hitung & Simpan Analisis';
+    };
+
+    // --- (Fungsi-fungsi pembantu lainnya) ---
+    const validateInputs=(i)=>{if(Object.values(i).some(isNaN))return"Semua kolom harus diisi angka.";if(i.totalPakan<=0||i.jumlahBibitAwal<=0)return"Total pakan & bibit awal harus > 0.";if(i.bobotPanen<=i.bobotAwal)return"Bobot panen harus > bobot awal.";if(i.jumlahIkanPanen>i.jumlahBibitAwal)return"Ikan panen tidak boleh > bibit awal.";return null;};
+    const calculateMetrics=(i)=>{const pB=i.bobotPanen-i.bobotAwal;const fcr=pB>0?i.totalPakan/pB:0;const ep=i.totalPakan>0?(pB/i.totalPakan)*100:0;const sr=(i.jumlahIkanPanen/i.jumlahBibitAwal)*100;return{pertambahanBobot:pB,fcr,ep,sr};};
+    const displayStatus=(el,t,bg,c)=>{el.innerHTML=`<span class="status-badge" style="background-color:${bg};color:${c};">${t}</span>`;};
+    const updateUI=(r)=>{elements.outputs.pertambahanBobot.textContent=`${r.pertambahanBobot.toFixed(2)} kg`;elements.outputs.fcr.textContent=r.fcr.toFixed(2);elements.outputs.ep.textContent=`${r.ep.toFixed(2)} %`;elements.outputs.sr.textContent=`${r.sr.toFixed(2)} %`;if(r.fcr>0&&r.fcr<1.0){displayStatus(elements.outputs.statusFcr,'🟢 FCR Sangat Efisien','#dcfce7','#166534');}else if(r.fcr<=1.2){displayStatus(elements.outputs.statusFcr,'🔵 FCR Efisien','#dbeafe','#1e40af');}else if(r.fcr<=1.5){displayStatus(elements.outputs.statusFcr,'🟡 FCR Cukup Efisien','#fef9c3','#854d0e');}else{displayStatus(elements.outputs.statusFcr,'🔴 FCR Kurang Efisien','#fee2e2','#991b1b');}if(r.sr>=80){displayStatus(elements.outputs.statusSr,'✅ SR Berhasil (di atas 80%)','#dcfce7','#166534');}else{displayStatus(elements.outputs.statusSr,'⚠️ SR Perlu Evaluasi (di bawah 80%)','#fef9c3','#854d0e');}elements.resultContainer.style.display='block';};
+    const handlePlanning=()=>{const tFcr=parseFloat(elements.inputs.targetFcr.value);if(isNaN(tFcr)||tFcr<=0||appState.pertambahanBobot<=0){elements.planningResultEl.innerHTML=`<p class="text-red-600">Hitung analisis terlebih dahulu.</p>`;elements.planningResultEl.style.display='block';return;}const pI=appState.pertambahanBobot*tFcr;const sP=appState.totalPakan-pI;let resHTML=`<p>Dengan target FCR <strong>${tFcr.toFixed(2)}</strong>, pakan idealnya <strong>${pI.toFixed(2)} kg</strong>.</p>`;if(sP>0.01){resHTML+=`<p class="mt-2 font-semibold text-green-700">Anda berpotensi HEMAT pakan ${sP.toFixed(2)} kg.</p>`;}else if(sP<-0.01){const fcrSaatIni=appState.totalPakan/appState.pertambahanBobot;resHTML+=`<p class="mt-2 font-semibold text-blue-700">FCR Anda (${fcrSaatIni.toFixed(2)}) sudah lebih baik dari target.</p>`;}else{resHTML+=`<p class="mt-2 font-semibold">Target FCR sama dengan capaian.</p>`;}elements.planningResultEl.innerHTML=resHTML;elements.planningResultEl.style.display='block';};
+
+    // Tambahkan event listener ke tombol
+    elements.calculateBtn.addEventListener('click', handleCalculation);
+    elements.planBtn.addEventListener('click', handlePlanning);
+});
 </script>
+
+</body>
+</html>
