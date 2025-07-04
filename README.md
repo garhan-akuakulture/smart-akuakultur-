@@ -182,25 +182,68 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 3000);
     };
 
-    // FUNGSI UNTUK MENGIRIM DATA KE GOOGLE SHEET
+    /*
+        CATATAN PENTING UNTUK INTEGRASI GOOGLE SHEET:
+        Metode pengiriman data telah diubah agar lebih stabil.
+        Anda juga HARUS memperbarui fungsi `doPost(e)` di Google Apps Script Anda.
+        Hapus fungsi `doPost(e)` yang lama dan ganti dengan yang ini:
+
+        function doPost(e) {
+          try {
+            var data = e.parameter;
+            // Ganti "Sheet1" jika nama sheet Anda berbeda
+            var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Sheet1"); 
+
+            sheet.appendRow([
+              new Date(),
+              data.bobotAwal,
+              data.totalPakan,
+              data.bobotPanen,
+              data.jumlahBibitAwal,
+              data.jumlahIkanPanen,
+              data.pertambahanBobot,
+              data.fcr,
+              data.ep,
+              data.sr
+            ]);
+            
+            return ContentService
+              .createTextOutput(JSON.stringify({ "status": "sukses", "message": "Data berhasil disimpan!" }))
+              .setMimeType(ContentService.MimeType.JSON);
+
+          } catch (error) {
+            return ContentService
+              .createTextOutput(JSON.stringify({ "status": "gagal", "message": error.toString() }))
+              .setMimeType(ContentService.MimeType.JSON);
+          }
+        }
+
+        Setelah memperbarui script, jangan lupa untuk DEPLOY ULANG sebagai Web App.
+    */
+    // FUNGSI UNTUK MENGIRIM DATA KE GOOGLE SHEET (METODE BARU YANG LEBIH STABIL)
     const sendDataToGoogleSheet = async (inputs, results) => {
-        // Gabungkan data input dan hasil kalkulasi menjadi satu objek
         const payload = { ...inputs, ...results };
+        const formData = new FormData();
+        for (const key in payload) {
+            formData.append(key, payload[key]);
+        }
         
         try {
             const response = await fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
-                mode: 'cors', // Diperlukan untuk request lintas domain
-                headers: { 
-                    'Content-Type': 'text/plain;charset=utf-8', // Tipe konten yang diterima Apps Script
-                },
-                body: JSON.stringify(payload) // Kirim data sebagai string JSON
+                mode: 'cors',
+                body: new URLSearchParams(formData), // Kirim sebagai application/x-www-form-urlencoded
             });
+
+            if (!response.ok) {
+               throw new Error(`Network response was not ok. Status: ${response.status}`);
+            }
+
             const result = await response.json();
             if (result.status === 'sukses') {
                 showNotification('✅ Data berhasil tersimpan di Google Sheet!', true);
             } else {
-                throw new Error(result.message);
+                throw new Error(result.message || 'Eksekusi script gagal.');
             }
         } catch (error) {
             console.error('Error saat mengirim ke Google Sheet:', error);
