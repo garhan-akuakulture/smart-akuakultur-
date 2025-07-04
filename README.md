@@ -104,13 +104,13 @@
 </head>
 <body class="p-4 md:p-8">
 <canvas id="fishery-bg"></canvas>
-<div class="main-content max-w-6xl mx-auto">
+<div class="main-content max-w-3xl mx-auto">
     <div class="text-center mb-10">
         <h1 class="text-4xl md:text-5xl font-extrabold text-white">Smart Akuakultur Sistem</h1>
         <p class="text-lg text-slate-400 mt-2">by Tegar</p>
     </div>
     
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div class="space-y-8">
         <!-- Kolom Input -->
         <div class="card">
             <h2 class="text-2xl font-bold mb-6 border-b border-slate-700 pb-4 flex items-center gap-3">
@@ -261,6 +261,7 @@
     <div id="error-message" class="mt-6 text-center text-red-400 font-semibold p-4 bg-red-500/10 rounded-lg" style="display: none;"></div>
     <footer class="text-center mt-12 text-sm text-slate-500">
         <p>&copy; 2025 Smart Akuakultur Sistem by Tegar.</p>
+        <p class="mt-1">Kontak: <a href="mailto:tegarraihan211204@gmail.com" class="text-indigo-400 hover:underline">tegarraihan211204@gmail.com</a></p>
     </footer>
 </div>
 
