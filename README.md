@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Akuakultur Sistem by Tegar</title>
+    <!-- Memuat Tailwind CSS dari CDN, cara ini kompatibel dengan GitHub Pages -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Gaya tambahan untuk UI dan Background Interaktif */
@@ -11,6 +12,7 @@
             font-family: 'Inter', sans-serif; 
             background-color: #0f172a; /* Warna dasar slate-900 */
             color: #f8fafc; /* Teks default terang */
+            overflow-x: hidden; /* Mencegah scroll horizontal */
         }
         #interactive-bg {
             position: fixed;
@@ -18,12 +20,16 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1; /* Letakkan di belakang semua konten */
+            z-index: 0; /* Letakkan di belakang konten utama */
+        }
+        .main-content {
+            position: relative;
+            z-index: 1; /* Konten utama berada di atas background */
         }
         .card { 
-            background-color: rgba(255, 255, 255, 0.05); /* Latar belakang semi-transparan */
-            backdrop-filter: blur(10px); /* Efek blur untuk tampilan modern */
-            -webkit-backdrop-filter: blur(10px);
+            background-color: rgba(15, 23, 42, 0.75); /* Latar belakang semi-transparan lebih gelap */
+            backdrop-filter: blur(12px); /* Efek blur untuk tampilan modern */
+            -webkit-backdrop-filter: blur(12px);
             border-radius: 0.75rem; 
             padding: 2rem; 
             box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
@@ -91,7 +97,7 @@
 </head>
 <body class="p-4 md:p-8">
 <canvas id="interactive-bg"></canvas>
-<div class="max-w-6xl mx-auto relative z-10">
+<div class="main-content max-w-6xl mx-auto">
     <div class="text-center mb-10">
         <h1 class="text-4xl md:text-5xl font-extrabold text-white">Smart Akuakultur Sistem</h1>
         <p class="text-lg text-slate-400 mt-2">by Tegar</p>
@@ -212,6 +218,8 @@
 
 <script>
 // --- SCRIPT UNTUK BACKGROUND INTERAKTIF ---
+// Kode ini sudah siap pakai dan tidak perlu diubah.
+// Ia akan membuat animasi partikel di latar belakang.
 const canvas = document.getElementById('interactive-bg');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
@@ -265,16 +273,16 @@ class Particle {
         let distance = Math.sqrt(dx*dx + dy*dy);
         if (distance < mouse.radius + this.size){
             if (mouse.x < this.x && this.x < canvas.width - this.size * 10) {
-                this.x += 5;
+                this.x += 3;
             }
             if (mouse.x > this.x && this.x > this.size * 10) {
-                this.x -= 5;
+                this.x -= 3;
             }
             if (mouse.y < this.y && this.y < canvas.height - this.size * 10) {
-                this.y += 5;
+                this.y += 3;
             }
             if (mouse.y > this.y && this.y > this.size * 10) {
-                this.y -= 5;
+                this.y -= 3;
             }
         }
         // Gerakkan partikel
@@ -355,6 +363,7 @@ animate();
 
 
 // --- SCRIPT UNTUK LOGIKA KALKULATOR ---
+// Kode ini tidak diubah dan berfungsi sama seperti sebelumnya.
 document.addEventListener('DOMContentLoaded', () => {
 
     // KUMPULKAN SEMUA ELEMEN DOM
