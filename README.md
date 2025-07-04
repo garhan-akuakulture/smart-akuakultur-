@@ -1,228 +1,180 @@
-# smart-akuakultur tegar raihan
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Akuakultur</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        .card {
-            background-color: white ;
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            transition: all 0.3s ease-in-out;
-        }
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.75rem 0;
-            border-bottom: 1px solid #e5e7eb;
-        }
-        .result-item:last-child {
-            border-bottom: none;
-        }
-        .status-badge {
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-weight: 700;
-            font-size: 0.875rem;
-        }
-    </style>
-</head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
-    <div class="w-full max-w-4xl mx-auto">
-        <div class="text-center mb-8">
-            <h1 class="text-3xl md:text-4xl font-bold text-gray-800">Smart Akuakultur</h1>
-            <p class="text-gray-600 mt-2">Kalkulator Cerdas untuk Budidaya Ikan Anda</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Kolom Input -->
+        <div class="card">
+            <h2 class="text-2xl font-bold text-gray-700 mb-6 border-b pb-3">Data Siklus Panen</h2>
+            
+            <div class="space-y-4">
+                <div>
+                    <label for="bobot_awal_tebar" class="block text-sm font-medium text-gray-700">Total Bobot Awal (kg)</label>
+                    <input type="number" id="bobot_awal_tebar" placeholder="Contoh: 10" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <div>
+                    <label for="total_pakan" class="block text-sm font-medium text-gray-700">Total Pakan Dihabiskan (kg)</label>
+                    <input type="number" id="total_pakan" placeholder="Contoh: 120" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <div>
+                    <label for="bobot_panen" class="block text-sm font-medium text-gray-700">Total Bobot Panen (kg)</label>
+                    <input type="number" id="bobot_panen" placeholder="Contoh: 110" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <div>
+                    <label for="jumlah_bibit_awal" class="block text-sm font-medium text-gray-700">Jumlah Bibit Awal (ekor)</label>
+                    <input type="number" id="jumlah_bibit_awal" placeholder="Contoh: 1000" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <div>
+                    <label for="jumlah_ikan_panen" class="block text-sm font-medium text-gray-700">Jumlah Ikan Panen (ekor)</label>
+                    <input type="number" id="jumlah_ikan_panen" placeholder="Contoh: 950" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+            </div>
+
+            <button id="calculate-btn" class="mt-8 w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-transform transform hover:scale-105">
+                Hitung Analisis
+            </button>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <!-- Kolom Input -->
+        <!-- Kolom Hasil -->
+        <div id="result-container" class="space-y-8" style="display: none;">
             <div class="card">
-                <h2 class="text-2xl font-bold text-gray-700 mb-6 border-b pb-3">Data Siklus Panen</h2>
-                
-                <div class="space-y-4">
-                    <div>
-                        <label for="bobot_awal_tebar" class="block text-sm font-medium text-gray-700">Total Bobot Awal (kg)</label>
-                        <input type="number" id="bobot_awal_tebar" placeholder="Contoh: 10" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                <h2 class="text-2xl font-bold text-gray-700 mb-4 border-b pb-3">Hasil Analisis</h2>
+                <div class="space-y-2">
+                    <div class="result-item">
+                        <span class="text-gray-600">Pertambahan Bobot</span>
+                        <span id="hasil-pertambahan-bobot" class="font-bold text-lg text-gray-800"></span>
                     </div>
-                    <div>
-                        <label for="total_pakan" class="block text-sm font-medium text-gray-700">Total Pakan Dihabiskan (kg)</label>
-                        <input type="number" id="total_pakan" placeholder="Contoh: 120" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    <div class="result-item">
+                        <span class="text-gray-600">Rasio Konversi Pakan (FCR)</span>
+                        <span id="hasil-fcr" class="font-bold text-lg text-gray-800"></span>
                     </div>
-                    <div>
-                        <label for="bobot_panen" class="block text-sm font-medium text-gray-700">Total Bobot Panen (kg)</label>
-                        <input type="number" id="bobot_panen" placeholder="Contoh: 110" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    <div class="result-item">
+                        <span class="text-gray-600">Efisiensi Pakan (EP)</span>
+                        <span id="hasil-ep" class="font-bold text-lg text-gray-800"></span>
                     </div>
-                    <div>
-                        <label for="jumlah_bibit_awal" class="block text-sm font-medium text-gray-700">Jumlah Bibit Awal (ekor)</label>
-                        <input type="number" id="jumlah_bibit_awal" placeholder="Contoh: 1000" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                    </div>
-                    <div>
-                        <label for="jumlah_ikan_panen" class="block text-sm font-medium text-gray-700">Jumlah Ikan Panen (ekor)</label>
-                        <input type="number" id="jumlah_ikan_panen" placeholder="Contoh: 950" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    <div class="result-item">
+                        <span class="text-gray-600">Survival Rate (SR)</span>
+                        <span id="hasil-sr" class="font-bold text-lg text-gray-800"></span>
                     </div>
                 </div>
-
-                <button id="calculate-btn" class="mt-8 w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-transform transform hover:scale-105">
-                    Hitung Analisis
-                </button>
+                
+                <div id="status-fcr" class="mt-4 text-center"></div>
+                <div id="status-sr" class="mt-2 text-center"></div>
             </div>
 
-            <!-- Kolom Hasil -->
-            <div id="result-container" class="space-y-8" style="display: none;">
-                <div class="card">
-                    <h2 class="text-2xl font-bold text-gray-700 mb-4 border-b pb-3">Hasil Analisis</h2>
-                    <div class="space-y-2">
-                        <div class="result-item">
-                            <span class="text-gray-600">Pertambahan Bobot</span>
-                            <span id="hasil-pertambahan-bobot" class="font-bold text-lg text-gray-800"></span>
-                        </div>
-                        <div class="result-item">
-                            <span class="text-gray-600">Rasio Konversi Pakan (FCR)</span>
-                            <span id="hasil-fcr" class="font-bold text-lg text-gray-800"></span>
-                        </div>
-                        <div class="result-item">
-                            <span class="text-gray-600">Efisiensi Pakan (EP)</span>
-                            <span id="hasil-ep" class="font-bold text-lg text-gray-800"></span>
-                        </div>
-                        <div class="result-item">
-                            <span class="text-gray-600">Survival Rate (SR)</span>
-                            <span id="hasil-sr" class="font-bold text-lg text-gray-800"></span>
-                        </div>
+            <div class="card">
+                <h2 class="text-2xl font-bold text-gray-700 mb-4 border-b pb-3">Perencanaan Pakan</h2>
+                 <div>
+                    <label for="target_fcr" class="block text-sm font-medium text-gray-700">Masukkan Target FCR Baru:</label>
+                    <div class="flex space-x-2 mt-1">
+                        <input type="number" id="target_fcr" value="1.3" class="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        <button id="plan-btn" class="px-4 py-2 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700">Rencanakan</button>
                     </div>
-                    
-                    <div id="status-fcr" class="mt-4 text-center"></div>
-                    <div id="status-sr" class="mt-2 text-center"></div>
                 </div>
-
-                <div class="card">
-                    <h2 class="text-2xl font-bold text-gray-700 mb-4 border-b pb-3">Perencanaan Pakan</h2>
-                     <div>
-                        <label for="target_fcr" class="block text-sm font-medium text-gray-700">Masukkan Target FCR Baru:</label>
-                        <div class="flex space-x-2 mt-1">
-                            <input type="number" id="target_fcr" value="1.3" class="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                            <button id="plan-btn" class="px-4 py-2 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700">Rencanakan</button>
-                        </div>
-                    </div>
-                    <div id="planning-result" class="mt-4 text-center text-gray-700 bg-gray-50 p-4 rounded-lg" style="display: none;"></div>
-                </div>
+                <div id="planning-result" class="mt-4 text-center text-gray-700 bg-gray-50 p-4 rounded-lg" style="display: none;"></div>
             </div>
         </div>
-        <div id="error-message" class="mt-6 text-center text-red-600 font-semibold"></div>
     </div>
+    <div id="error-message" class="mt-6 text-center text-red-600 font-semibold"></div>
+</div>
 
-    <script>
-        // --- Ambil Elemen dari DOM ---
-        const calculateBtn = document.getElementById('calculate-btn');
-        const planBtn = document.getElementById('plan-btn');
-        const resultContainer = document.getElementById('result-container');
-        const errorMessage = document.getElementById('error-message');
+<script>
+    // --- Ambil Elemen dari DOM ---
+    const calculateBtn = document.getElementById('calculate-btn');
+    const planBtn = document.getElementById('plan-btn');
+    const resultContainer = document.getElementById('result-container');
+    const errorMessage = document.getElementById('error-message');
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxYTVTySvme1I2dH1m8mmDtgmVwia9dAjd6ve0FsA2PQkQB-rThJG3XzcFxGis7D40k/exec';
 
-        let currentPertambahanBobot = 0;
-        let currentTotalPakan = 0;
+    let currentPertambahanBobot = 0;
+    let currentTotalPakan = 0;
 
-        // --- Fungsi untuk Menampilkan Status dengan Warna ---
-        function displayStatus(elementId, text, bgColor, textColor) {
-            const el = document.getElementById(elementId);
-            el.innerHTML = `<span class="status-badge" style="background-color:${bgColor}; color:${textColor};">${text}</span>`;
+    // --- Fungsi untuk Menampilkan Status dengan Warna ---
+    function displayStatus(elementId, text, bgColor, textColor) {
+        const el = document.getElementById(elementId);
+        el.innerHTML = `<span class="status-badge" style="background-color:${bgColor}; color:${textColor};">${text}</span>`;
+    }
+
+    // --- Fungsi Utama untuk Analisis ---
+    calculateBtn.addEventListener('click', () => {
+        // Reset state
+        errorMessage.textContent = '';
+        resultContainer.style.display = 'none';
+        document.getElementById('planning-result').style.display = 'none';
+
+        // Ambil nilai dari input
+        const bobot_awal_tebar = parseFloat(document.getElementById('bobot_awal_tebar').value);
+        const total_pakan = parseFloat(document.getElementById('total_pakan').value);
+        const bobot_panen = parseFloat(document.getElementById('bobot_panen').value);
+        const jumlah_bibit_awal = parseInt(document.getElementById('jumlah_bibit_awal').value);
+        const jumlah_ikan_panen = parseInt(document.getElementById('jumlah_ikan_panen').value);
+
+        // Validasi input
+        if (isNaN(bobot_awal_tebar) || isNaN(total_pakan) || isNaN(bobot_panen) || isNaN(jumlah_bibit_awal) || isNaN(jumlah_ikan_panen) ||
+            total_pakan <= 0 || bobot_panen <= bobot_awal_tebar || jumlah_bibit_awal <= 0 || jumlah_ikan_panen > jumlah_bibit_awal) {
+            errorMessage.textContent = 'Error: Data tidak valid. Periksa kembali semua input Anda.';
+            return;
         }
 
-        // --- Fungsi Utama untuk Analisis ---
-        calculateBtn.addEventListener('click', () => {
-            // Reset state
-            errorMessage.textContent = '';
-            resultContainer.style.display = 'none';
-            document.getElementById('planning-result').style.display = 'none';
-
-            // Ambil nilai dari input
-            const bobot_awal_tebar = parseFloat(document.getElementById('bobot_awal_tebar').value);
-            const total_pakan = parseFloat(document.getElementById('total_pakan').value);
-            const bobot_panen = parseFloat(document.getElementById('bobot_panen').value);
-            const jumlah_bibit_awal = parseInt(document.getElementById('jumlah_bibit_awal').value);
-            const jumlah_ikan_panen = parseInt(document.getElementById('jumlah_ikan_panen').value);
-
-            // Validasi input
-            if (isNaN(bobot_awal_tebar) || isNaN(total_pakan) || isNaN(bobot_panen) || isNaN(jumlah_bibit_awal) || isNaN(jumlah_ikan_panen) ||
-                total_pakan <= 0 || bobot_panen <= bobot_awal_tebar || jumlah_bibit_awal <= 0 || jumlah_ikan_panen > jumlah_bibit_awal) {
-                errorMessage.textContent = 'Error: Data tidak valid. Periksa kembali semua input Anda.';
-                return;
-            }
-
-            // Perhitungan
-            const pertambahan_bobot = bobot_panen - bobot_awal_tebar;
-            const fcr = pertambahan_bobot > 0 ? total_pakan / pertambahan_bobot : 0;
-            const efisiensi_pakan = total_pakan > 0 ? (pertambahan_bobot / total_pakan) * 100 : 0;
-            const survival_rate = (jumlah_ikan_panen / jumlah_bibit_awal) * 100;
-            
-            // Simpan variabel untuk perencanaan
-            currentPertambahanBobot = pertambahan_bobot;
-            currentTotalPakan = total_pakan;
-
-            // Tampilkan hasil
-            document.getElementById('hasil-pertambahan-bobot').textContent = `${pertambahan_bobot.toFixed(2)} kg`;
-            document.getElementById('hasil-fcr').textContent = fcr.toFixed(2);
-            document.getElementById('hasil-ep').textContent = `${efisiensi_pakan.toFixed(2)} %`;
-            document.getElementById('hasil-sr').textContent = `${survival_rate.toFixed(2)} %`;
-
-            // Tampilkan interpretasi FCR
-            if (fcr > 0 && fcr < 1.0) {
-                displayStatus('status-fcr', '🟢 FCR Sangat Efisien', '#dcfce7', '#166534');
-            } else if (fcr >= 1.0 && fcr <= 1.2) {
-                displayStatus('status-fcr', '🔵 FCR Efisien', '#dbeafe', '#1e40af');
-            } else if (fcr > 1.2 && fcr <= 1.5) {
-                displayStatus('status-fcr', '🟡 FCR Cukup Efisien', '#fef9c3', '#854d0e');
-            } else {
-                displayStatus('status-fcr', '🔴 FCR Kurang Efisien', '#fee2e2', '#991b1b');
-            }
-
-            // Tampilkan interpretasi SR
-            if (survival_rate >= 80) {
-                displayStatus('status-sr', '✅ SR Berhasil (di atas 80%)', '#dcfce7', '#166534');
-            } else {
-                displayStatus('status-sr', '⚠️ SR Perlu Evaluasi (di bawah 80%)', '#fef9c3', '#854d0e');
-            }
-
-            resultContainer.style.display = 'block';
-        });
+        // Perhitungan
+        const pertambahan_bobot = bobot_panen - bobot_awal_tebar;
+        const fcr = pertambahan_bobot > 0 ? total_pakan / pertambahan_bobot : 0;
+        const efisiensi_pakan = total_pakan > 0 ? (pertambahan_bobot / total_pakan) * 100 : 0;
+        const survival_rate = (jumlah_ikan_panen / jumlah_bibit_awal) * 100;
         
-        // --- Fungsi untuk Perencanaan ---
-        planBtn.addEventListener('click', () => {
-            const planningResultEl = document.getElementById('planning-result');
-            const target_fcr = parseFloat(document.getElementById('target_fcr').value);
+        // Simpan variabel untuk perencanaan
+        currentPertambahanBobot = pertambahan_bobot;
+        currentTotalPakan = total_pakan;
 
-            if (isNaN(target_fcr) || target_fcr <= 0 || currentPertambahanBobot <= 0) {
-                planningResultEl.innerHTML = `<p class="text-red-600">Masukkan target FCR yang valid dan hitung analisis terlebih dahulu.</p>`;
-                planningResultEl.style.display = 'block';
-                return;
-            }
+        // Tampilkan hasil
+        document.getElementById('hasil-pertambahan-bobot').textContent = `${pertambahan_bobot.toFixed(2)} kg`;
+        document.getElementById('hasil-fcr').textContent = fcr.toFixed(2);
+        document.getElementById('hasil-ep').textContent = `${efisiensi_pakan.toFixed(2)} %`;
+        document.getElementById('hasil-sr').textContent = `${survival_rate.toFixed(2)} %`;
 
-            const pakan_ideal = currentPertambahanBobot * target_fcr;
-            const selisih_pakan = currentTotalPakan - pakan_ideal;
-            
-            let resultHTML = `<p>Dengan target FCR <strong>${target_fcr.toFixed(2)}</strong>, pakan yang dibutuhkan adalah <strong>${pakan_ideal.toFixed(2)} kg</strong>.</p>`;
-            
-            if (selisih_pakan > 0) {
-                resultHTML += `<p class="mt-2 font-semibold text-green-700">Anda bisa HEMAT pakan sebanyak ${selisih_pakan.toFixed(2)} kg.</p>`;
-            } else if (selisih_pakan < 0) {
-                resultHTML += `<p class="mt-2 font-semibold text-yellow-700">Target ini lebih baik dari FCR Anda saat ini. Terus tingkatkan efisiensi!</p>`;
-            } else {
-                resultHTML += `<p class="mt-2 font-semibold">Target FCR sama dengan yang sudah dicapai.</p>`;
-            }
+        // Tampilkan interpretasi FCR
+        if (fcr > 0 && fcr < 1.0) {
+            displayStatus('status-fcr', '🟢 FCR Sangat Efisien', '#dcfce7', '#166534');
+        } else if (fcr >= 1.0 && fcr <= 1.2) {
+            displayStatus('status-fcr', '🔵 FCR Efisien', '#dbeafe', '#1e40af');
+        } else if (fcr > 1.2 && fcr <= 1.5) {
+            displayStatus('status-fcr', '🟡 FCR Cukup Efisien', '#fef9c3', '#854d0e');
+        } else {
+            displayStatus('status-fcr', '🔴 FCR Kurang Efisien', '#fee2e2', '#991b1b');
+        }
 
-            planningResultEl.innerHTML = resultHTML;
+        // Tampilkan interpretasi SR
+        if (survival_rate >= 80) {
+            displayStatus('status-sr', '✅ SR Berhasil (di atas 80%)', '#dcfce7', '#166534');
+        } else {
+            displayStatus('status-sr', '⚠️ SR Perlu Evaluasi (di bawah 80%)', '#fef9c3', '#854d0e');
+        }
+
+        resultContainer.style.display = 'block';
+    });
+    
+    // --- Fungsi untuk Perencanaan ---
+    planBtn.addEventListener('click', () => {
+        const planningResultEl = document.getElementById('planning-result');
+        const target_fcr = parseFloat(document.getElementById('target_fcr').value);
+
+        if (isNaN(target_fcr) || target_fcr <= 0 || currentPertambahanBobot <= 0) {
+            planningResultEl.innerHTML = `<p class="text-red-600">Masukkan target FCR yang valid dan hitung analisis terlebih dahulu.</p>`;
             planningResultEl.style.display = 'block';
-        });
+            return;
+        }
 
-    </script>
-</body>
-</html>
+        const pakan_ideal = currentPertambahanBobot * target_fcr;
+        const selisih_pakan = currentTotalPakan - pakan_ideal;
+        
+        let resultHTML = `<p>Dengan target FCR <strong>${target_fcr.toFixed(2)}</strong>, pakan yang dibutuhkan adalah <strong>${pakan_ideal.toFixed(2)} kg</strong>.</p>`;
+        
+        if (selisih_pakan > 0) {
+            resultHTML += `<p class="mt-2 font-semibold text-green-700">Anda bisa HEMAT pakan sebanyak ${selisih_pakan.toFixed(2)} kg.</p>`;
+        } else if (selisih_pakan < 0) {
+            resultHTML += `<p class="mt-2 font-semibold text-yellow-700">Target ini lebih baik dari FCR Anda saat ini. Terus tingkatkan efisiensi!</p>`;
+        } else {
+            resultHTML += `<p class="mt-2 font-semibold">Target FCR sama dengan yang sudah dicapai.</p>`;
+        }
+
+        planningResultEl.innerHTML = resultHTML;
+        planningResultEl.style.display = 'block';
+    });
+
+</script>
