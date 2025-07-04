@@ -81,12 +81,12 @@
         label { color: #cbd5e1; /* slate-300 */ }
         .card h2, .result-item span { color: #f1f5f9; /* slate-100 */ }
         .result-item span:first-child { color: #94a3b8; /* slate-400 */ }
-        input {
+        input, select {
             background-color: rgba(15, 23, 42, 0.5) !important; /* bg-slate-900/50 */
             border-color: #334155 !important; /* border-slate-700 */
             color: white !important;
         }
-        input:focus {
+        input:focus, select:focus {
             border-color: #6366f1 !important; /* focus:border-indigo-500 */
             --tw-ring-color: #6366f1 !important; /* focus:ring-indigo-500 */
         }
@@ -114,7 +114,15 @@
             </h2>
             <div class="space-y-5">
                 <div>
-                    <label for="bobot_awal_tebar" class="block text-sm font-medium mb-1">Total Bobot Awal (kg)</label>
+                    <label for="weight_unit" class="block text-sm font-medium mb-1">Satuan Bobot</label>
+                    <select id="weight_unit" class="mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
+                        <option value="kg">Kilogram (kg)</option>
+                        <option value="g">Gram (g)</option>
+                    </select>
+                </div>
+                <hr class="border-slate-700">
+                <div>
+                    <label for="bobot_awal_tebar" class="block text-sm font-medium mb-1">Total Bobot Awal</label>
                     <div class="relative">
                         <div class="input-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" /></svg>
@@ -123,7 +131,7 @@
                     </div>
                 </div>
                 <div>
-                    <label for="total_pakan" class="block text-sm font-medium mb-1">Total Pakan Dihabiskan (kg)</label>
+                    <label for="total_pakan" class="block text-sm font-medium mb-1">Total Pakan Dihabiskan</label>
                     <div class="relative">
                         <div class="input-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
@@ -132,7 +140,7 @@
                     </div>
                 </div>
                 <div>
-                    <label for="bobot_panen" class="block text-sm font-medium mb-1">Total Bobot Panen (kg)</label>
+                    <label for="bobot_panen" class="block text-sm font-medium mb-1">Total Bobot Panen</label>
                     <div class="relative">
                         <div class="input-icon">
                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
@@ -218,8 +226,6 @@
 
 <script>
 // --- SCRIPT UNTUK BACKGROUND INTERAKTIF ---
-// Kode ini sudah siap pakai dan tidak perlu diubah.
-// Ia akan membuat animasi partikel di latar belakang.
 const canvas = document.getElementById('interactive-bg');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
@@ -363,7 +369,6 @@ animate();
 
 
 // --- SCRIPT UNTUK LOGIKA KALKULATOR ---
-// Kode ini tidak diubah dan berfungsi sama seperti sebelumnya.
 document.addEventListener('DOMContentLoaded', () => {
 
     // KUMPULKAN SEMUA ELEMEN DOM
@@ -374,6 +379,7 @@ document.addEventListener('DOMContentLoaded', () => {
         errorMessage: document.getElementById('error-message'),
         planningResultEl: document.getElementById('planning-result'),
         inputs: {
+            weightUnit: document.getElementById('weight_unit'), // Elemen baru
             bobotAwal: document.getElementById('bobot_awal_tebar'),
             totalPakan: document.getElementById('total_pakan'),
             bobotPanen: document.getElementById('bobot_panen'),
@@ -390,7 +396,11 @@ document.addEventListener('DOMContentLoaded', () => {
             statusSr: document.getElementById('status-sr'),
         }
     };
-    const appState = { pertambahanBobot: 0, totalPakan: 0 };
+    const appState = { 
+        pertambahanBobot: 0, // Akan disimpan dalam gram
+        totalPakan: 0, // Akan disimpan dalam gram
+        unit: 'kg' // Menyimpan unit terpilih
+    };
     
     // FUNGSI UTAMA KALKULASI
     const handleCalculation = () => {
@@ -398,6 +408,9 @@ document.addEventListener('DOMContentLoaded', () => {
         elements.errorMessage.style.display = 'none';
         elements.errorMessage.textContent = '';
         
+        const unit = elements.inputs.weightUnit.value;
+        const conversionFactor = unit === 'kg' ? 1000 : 1;
+
         const inputs = {
             bobotAwal: parseFloat(elements.inputs.bobotAwal.value),
             totalPakan: parseFloat(elements.inputs.totalPakan.value),
@@ -414,21 +427,88 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        // Konversi semua bobot ke gram untuk konsistensi perhitungan
+        const inputsInGrams = {
+            bobotAwal: inputs.bobotAwal * conversionFactor,
+            totalPakan: inputs.totalPakan * conversionFactor,
+            bobotPanen: inputs.bobotPanen * conversionFactor,
+        };
+
         // Lakukan kalkulasi
-        const results = calculateMetrics(inputs);
+        const results = calculateMetrics(inputsInGrams, inputs.jumlahBibitAwal, inputs.jumlahIkanPanen);
+        
+        // Simpan state dalam gram
         appState.pertambahanBobot = results.pertambahanBobot;
-        appState.totalPakan = inputs.totalPakan;
+        appState.totalPakan = inputsInGrams.totalPakan;
+        appState.unit = unit;
         
         // Perbarui tampilan UI
-        updateUI(results);
+        updateUI(results, unit);
     };
 
     // --- (Fungsi-fungsi pembantu lainnya) ---
     const validateInputs=(i)=>{if(Object.values(i).some(isNaN))return"Semua kolom harus diisi angka.";if(i.totalPakan<=0||i.jumlahBibitAwal<=0)return"Total pakan & bibit awal harus > 0.";if(i.bobotPanen<=i.bobotAwal)return"Bobot panen harus > bobot awal.";if(i.jumlahIkanPanen>i.jumlahBibitAwal)return"Ikan panen tidak boleh > bibit awal.";return null;};
-    const calculateMetrics=(i)=>{const pB=i.bobotPanen-i.bobotAwal;const fcr=pB>0?i.totalPakan/pB:0;const ep=i.totalPakan>0?(pB/i.totalPakan)*100:0;const sr=(i.jumlahIkanPanen/i.jumlahBibitAwal)*100;return{pertambahanBobot:pB,fcr,ep,sr};};
+    
+    const calculateMetrics=(weightInputs, bibitAwal, ikanPanen)=>{
+        const pB = weightInputs.bobotPanen - weightInputs.bobotAwal;
+        const fcr = pB > 0 ? weightInputs.totalPakan / pB : 0;
+        const ep = weightInputs.totalPakan > 0 ? (pB / weightInputs.totalPakan) * 100 : 0;
+        const sr = (ikanPanen / bibitAwal) * 100;
+        return { pertambahanBobot: pB, fcr, ep, sr };
+    };
+
     const displayStatus=(el,t,bg,c)=>{el.innerHTML=`<span class="status-badge" style="background-color:${bg};color:${c};">${t}</span>`;};
-    const updateUI=(r)=>{elements.outputs.pertambahanBobot.textContent=`${r.pertambahanBobot.toFixed(2)} kg`;elements.outputs.fcr.textContent=r.fcr.toFixed(2);elements.outputs.ep.textContent=`${r.ep.toFixed(2)} %`;elements.outputs.sr.textContent=`${r.sr.toFixed(2)} %`;if(r.fcr>0&&r.fcr<1.0){displayStatus(elements.outputs.statusFcr,'🟢 FCR Sangat Efisien','#dcfce7','#166534');}else if(r.fcr<=1.2){displayStatus(elements.outputs.statusFcr,'🔵 FCR Efisien','#dbeafe','#1e40af');}else if(r.fcr<=1.5){displayStatus(elements.outputs.statusFcr,'🟡 FCR Cukup Efisien','#fef9c3','#854d0e');}else{displayStatus(elements.outputs.statusFcr,'🔴 FCR Kurang Efisien','#fee2e2','#991b1b');}if(r.sr>=80){displayStatus(elements.outputs.statusSr,'✅ SR Berhasil (di atas 80%)','#dcfce7','#166534');}else{displayStatus(elements.outputs.statusSr,'⚠️ SR Perlu Evaluasi (di bawah 80%)','#fef9c3','#854d0e');}elements.resultContainer.style.display='block';};
-    const handlePlanning=()=>{const tFcr=parseFloat(elements.inputs.targetFcr.value);if(isNaN(tFcr)||tFcr<=0||appState.pertambahanBobot<=0){elements.planningResultEl.innerHTML=`<p class="text-red-400">Hitung analisis terlebih dahulu.</p>`;elements.planningResultEl.style.display='block';return;}const pI=appState.pertambahanBobot*tFcr;const sP=appState.totalPakan-pI;let resHTML=`<p>Dengan target FCR <strong>${tFcr.toFixed(2)}</strong>, pakan idealnya <strong>${pI.toFixed(2)} kg</strong>.</p>`;if(sP>0.01){resHTML+=`<p class="mt-2 font-semibold text-green-400">Anda berpotensi HEMAT pakan ${sP.toFixed(2)} kg.</p>`;}else if(sP<-0.01){const fcrSaatIni=appState.totalPakan/appState.pertambahanBobot;resHTML+=`<p class="mt-2 font-semibold text-blue-400">FCR Anda (${fcrSaatIni.toFixed(2)}) sudah lebih baik dari target.</p>`;}else{resHTML+=`<p class="mt-2 font-semibold">Target FCR sama dengan capaian.</p>`;}elements.planningResultEl.innerHTML=resHTML;elements.planningResultEl.style.display='block';};
+    
+    const updateUI=(r, unit)=>{
+        let displayWeight = r.pertambahanBobot;
+        if (unit === 'kg') {
+            displayWeight /= 1000;
+        }
+
+        elements.outputs.pertambahanBobot.textContent=`${displayWeight.toFixed(2)} ${unit}`;
+        elements.outputs.fcr.textContent=r.fcr.toFixed(2);
+        elements.outputs.ep.textContent=`${r.ep.toFixed(2)} %`;
+        elements.outputs.sr.textContent=`${r.sr.toFixed(2)} %`;
+        
+        if(r.fcr>0&&r.fcr<1.0){displayStatus(elements.outputs.statusFcr,'🟢 FCR Sangat Efisien','#dcfce7','#166534');}else if(r.fcr<=1.2){displayStatus(elements.outputs.statusFcr,'🔵 FCR Efisien','#dbeafe','#1e40af');}else if(r.fcr<=1.5){displayStatus(elements.outputs.statusFcr,'🟡 FCR Cukup Efisien','#fef9c3','#854d0e');}else{displayStatus(elements.outputs.statusFcr,'🔴 FCR Kurang Efisien','#fee2e2','#991b1b');}
+        if(r.sr>=80){displayStatus(elements.outputs.statusSr,'✅ SR Berhasil (di atas 80%)','#dcfce7','#166534');}else{displayStatus(elements.outputs.statusSr,'⚠️ SR Perlu Evaluasi (di bawah 80%)','#fef9c3','#854d0e');}
+        
+        elements.resultContainer.style.display='block';
+    };
+
+    const handlePlanning=()=>{
+        const tFcr=parseFloat(elements.inputs.targetFcr.value);
+        if(isNaN(tFcr)||tFcr<=0||appState.pertambahanBobot<=0){
+            elements.planningResultEl.innerHTML=`<p class="text-red-400">Hitung analisis terlebih dahulu.</p>`;
+            elements.planningResultEl.style.display='block';
+            return;
+        }
+        
+        const unit = appState.unit;
+        const pakanIdealInGrams = appState.pertambahanBobot * tFcr;
+        const selisihPakanInGrams = appState.totalPakan - pakanIdealInGrams;
+
+        let displayPakanIdeal = pakanIdealInGrams;
+        let displaySelisih = selisihPakanInGrams;
+
+        if (unit === 'kg') {
+            displayPakanIdeal /= 1000;
+            displaySelisih /= 1000;
+        }
+
+        let resHTML=`<p>Dengan target FCR <strong>${tFcr.toFixed(2)}</strong>, pakan idealnya <strong>${displayPakanIdeal.toFixed(2)} ${unit}</strong>.</p>`;
+        if(displaySelisih > 0.01){
+            resHTML+=`<p class="mt-2 font-semibold text-green-400">Anda berpotensi HEMAT pakan ${displaySelisih.toFixed(2)} ${unit}.</p>`;
+        } else if(displaySelisih < -0.01){
+            const fcrSaatIni=appState.totalPakan/appState.pertambahanBobot;
+            resHTML+=`<p class="mt-2 font-semibold text-blue-400">FCR Anda (${fcrSaatIni.toFixed(2)}) sudah lebih baik dari target.</p>`;
+        } else {
+            resHTML+=`<p class="mt-2 font-semibold">Target FCR sama dengan capaian.</p>`;
+        }
+        
+        elements.planningResultEl.innerHTML=resHTML;
+        elements.planningResultEl.style.display='block';
+    };
 
     // Tambahkan event listener ke tombol
     elements.calculateBtn.addEventListener('click', handleCalculation);
