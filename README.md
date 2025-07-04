@@ -41,15 +41,6 @@
             box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
             border-color: rgba(255, 255, 255, 0.2);
         }
-        .input-icon {
-            position: absolute;
-            inset-y: 0;
-            left: 0;
-            display: flex;
-            align-items: center;
-            padding-left: 0.75rem; /* 12px */
-            color: #94a3b8; /* slate-400 */
-        }
         .main-button {
             display: flex;
             align-items: center;
@@ -146,49 +137,39 @@
                 </div>
                 <hr class="border-slate-700">
                 <div>
-                    <label for="bobot_awal_tebar" class="block text-sm font-medium mb-1">Total Bobot Awal</label>
-                    <div class="relative">
-                        <div class="input-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" /></svg>
-                        </div>
-                        <input type="number" id="bobot_awal_tebar" placeholder="Contoh: 10" class="pl-10 mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
-                    </div>
+                    <label for="bobot_awal_tebar" class="flex items-center text-sm font-medium mb-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" /></svg>
+                        <span>Total Bobot Awal</span>
+                    </label>
+                    <input type="number" id="bobot_awal_tebar" placeholder="Contoh: 10" class="mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
                 </div>
                 <div>
-                    <label for="total_pakan" class="block text-sm font-medium mb-1">Total Pakan Dihabiskan</label>
-                    <div class="relative">
-                        <div class="input-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
-                        </div>
-                        <input type="number" id="total_pakan" placeholder="Contoh: 120" class="pl-10 mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
-                    </div>
+                    <label for="total_pakan" class="flex items-center text-sm font-medium mb-1">
+                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
+                        <span>Total Pakan Dihabiskan</span>
+                    </label>
+                    <input type="number" id="total_pakan" placeholder="Contoh: 120" class="mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
                 </div>
                 <div>
-                    <label for="bobot_panen" class="block text-sm font-medium mb-1">Total Bobot Panen</label>
-                    <div class="relative">
-                        <div class="input-icon">
-                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
-                        </div>
-                        <input type="number" id="bobot_panen" placeholder="Contoh: 110" class="pl-10 mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
-                    </div>
+                    <label for="bobot_panen" class="flex items-center text-sm font-medium mb-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+                        <span>Total Bobot Panen</span>
+                    </label>
+                    <input type="number" id="bobot_panen" placeholder="Contoh: 110" class="mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
                 </div>
                 <div>
-                    <label for="jumlah_bibit_awal" class="block text-sm font-medium mb-1">Jumlah Bibit Awal (ekor)</label>
-                    <div class="relative">
-                        <div class="input-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
-                        </div>
-                        <input type="number" id="jumlah_bibit_awal" placeholder="Contoh: 1000" class="pl-10 mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
-                    </div>
+                    <label for="jumlah_bibit_awal" class="flex items-center text-sm font-medium mb-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                        <span>Jumlah Bibit Awal (ekor)</span>
+                    </label>
+                    <input type="number" id="jumlah_bibit_awal" placeholder="Contoh: 1000" class="mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
                 </div>
                 <div>
-                    <label for="jumlah_ikan_panen" class="block text-sm font-medium mb-1">Jumlah Ikan Panen (ekor)</label>
-                    <div class="relative">
-                       <div class="input-icon">
-                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M15 21v-1a6 6 0 00-1.781-4.121M12 4.354a4 4 0 000 5.292M3 15a4 4 0 014 4v1h4v-1a4 4 0 014-4h3m-4-6a4 4 0 014-4h3" /></svg>
-                       </div>
-                        <input type="number" id="jumlah_ikan_panen" placeholder="Contoh: 950" class="pl-10 mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
-                    </div>
+                    <label for="jumlah_ikan_panen" class="flex items-center text-sm font-medium mb-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M15 21v-1a6 6 0 00-1.781-4.121M12 4.354a4 4 0 000 5.292M3 15a4 4 0 014 4v1h4v-1a4 4 0 014-4h3m-4-6a4 4 0 014-4h3" /></svg>
+                        <span>Jumlah Ikan Panen (ekor)</span>
+                    </label>
+                    <input type="number" id="jumlah_ikan_panen" placeholder="Contoh: 950" class="mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
                 </div>
             </div>
             <button id="calculate-btn" class="main-button mt-8 w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 transform hover:scale-105">
@@ -590,7 +571,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if(r.fcr>0&&r.fcr<1.0)displayStatus(statusFcrEl,'🟢 FCR Sangat Efisien','#dcfce7','#166534');
         else if(r.fcr<=1.2)displayStatus(statusFcrEl,'🔵 FCR Efisien','#dbeafe','#1e40af');
         else if(r.fcr<=1.5)displayStatus(statusFcrEl,'🟡 FCR Cukup Efisien','#fef9c3','#854d0e');
-        else displayStatus(statusFcrEl,'🔴 FCR Kurang Efisien','#fee2e2','#991b1b');
+        else displayStatus(statusFcrEl,'� FCR Kurang Efisien','#fee2e2','#991b1b');
         
         if(r.sr>=80)displayStatus(statusSrEl,'✅ SR Berhasil (di atas 80%)','#dcfce7','#166534');
         else displayStatus(statusSrEl,'⚠️ SR Perlu Evaluasi (di bawah 80%)','#fef9c3','#854d0e');
@@ -635,3 +616,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
+�
