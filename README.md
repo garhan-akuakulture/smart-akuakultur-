@@ -14,7 +14,7 @@
             color: #f8fafc; /* Teks default terang */
             overflow-x: hidden; /* Mencegah scroll horizontal */
         }
-        #interactive-bg {
+        #fishery-bg { /* ID Baru untuk background perikanan */
             position: fixed;
             top: 0;
             left: 0;
@@ -41,27 +41,6 @@
             box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
             border-color: rgba(255, 255, 255, 0.2);
         }
-        .result-item { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            padding: 1rem 0.5rem; 
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            transition: background-color 0.2s ease-in-out;
-        }
-        .result-item:hover {
-            background-color: rgba(255, 255, 255, 0.05);
-        }
-        .result-item:last-child { 
-            border-bottom: none; 
-        }
-        .status-badge { 
-            display:inline-block; 
-            padding: 0.5rem 1rem; 
-            border-radius: 9999px; 
-            font-weight: 600; 
-            font-size: 0.875rem;
-        }
         .input-icon {
             position: absolute;
             inset-y: 0;
@@ -79,8 +58,7 @@
         }
         /* Penyesuaian warna teks dan input untuk tema gelap */
         label { color: #cbd5e1; /* slate-300 */ }
-        .card h2, .result-item span { color: #f1f5f9; /* slate-100 */ }
-        .result-item span:first-child { color: #94a3b8; /* slate-400 */ }
+        .card h2 { color: #f1f5f9; /* slate-100 */ }
         input, select {
             background-color: rgba(15, 23, 42, 0.5) !important; /* bg-slate-900/50 */
             border-color: #334155 !important; /* border-slate-700 */
@@ -90,13 +68,31 @@
             border-color: #6366f1 !important; /* focus:border-indigo-500 */
             --tw-ring-color: #6366f1 !important; /* focus:ring-indigo-500 */
         }
+        /* Gaya untuk tabel hasil */
+        .result-table th {
+            color: #94a3b8; /* slate-400 */
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .result-table td {
+            color: #cbd5e1; /* slate-300 */
+        }
+        .result-table .value-cell {
+            color: #f1f5f9; /* slate-100 */
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-weight: 600;
+        }
+        .result-table tr:hover td {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body class="p-4 md:p-8">
-<canvas id="interactive-bg"></canvas>
+<canvas id="fishery-bg"></canvas>
 <div class="main-content max-w-6xl mx-auto">
     <div class="text-center mb-10">
         <h1 class="text-4xl md:text-5xl font-extrabold text-white">Smart Akuakultur Sistem</h1>
@@ -113,6 +109,17 @@
                 Data Siklus Panen
             </h2>
             <div class="space-y-5">
+                <div>
+                    <label for="fish_type" class="block text-sm font-medium mb-1">Pilih Jenis Ikan</label>
+                    <select id="fish_type" class="mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
+                        <option value="lele">Lele</option>
+                        <option value="nila">Nila</option>
+                        <option value="gurame">Gurame</option>
+                        <option value="mas">Ikan Mas</option>
+                        <option value="patin">Patin</option>
+                        <option value="bawal">Bawal</option>
+                    </select>
+                </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label for="weight_unit" class="block text-sm font-medium mb-1">Satuan Bobot</label>
@@ -175,7 +182,7 @@
             </div>
             <button id="calculate-btn" class="main-button mt-8 w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 transform hover:scale-105">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
-                <span>Hitung Analisis</span>
+                <span>Hitung Analisis Panen</span>
             </button>
         </div>
 
@@ -186,35 +193,58 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                     Hasil Analisis
                 </h2>
-                <div class="space-y-2">
-                    <div class="result-item">
-                        <span>Pertambahan Bobot</span>
-                        <span id="hasil-pertambahan-bobot" class="font-bold text-lg"></span>
-                    </div>
-                    <div class="result-item">
-                        <span>Rasio Konversi Pakan (FCR)</span>
-                        <span id="hasil-fcr" class="font-bold text-lg"></span>
-                    </div>
-                    <div class="result-item">
-                        <span>Efisiensi Pakan (EP)</span>
-                        <span id="hasil-ep" class="font-bold text-lg"></span>
-                    </div>
-                    <div class="result-item">
-                        <span>Survival Rate (SR)</span>
-                        <span id="hasil-sr" class="font-bold text-lg"></span>
-                    </div>
-                    <div class="result-item">
-                        <span>Specific Growth Rate (SGR)</span>
-                        <span id="hasil-sgr" class="font-bold text-lg"></span>
-                    </div>
-                    <div class="result-item">
-                        <span>Pertumbuhan Rata-rata</span>
-                        <span id="hasil-pertumbuhan-rata" class="font-bold text-lg"></span>
-                    </div>
-                    <div class="result-item">
-                        <span>Pertumbuhan Harian (ADG)</span>
-                        <span id="hasil-adg" class="font-bold text-lg"></span>
-                    </div>
+                <div class="mt-4 overflow-x-auto">
+                    <table class="w-full text-sm text-left result-table">
+                        <thead class="bg-slate-800/50">
+                            <tr>
+                                <th class="p-3 rounded-tl-lg">Parameter</th>
+                                <th class="p-3 text-right">Nilai</th>
+                                <th class="p-3 text-right rounded-tr-lg">Satuan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-slate-700">
+                                <td class="p-3">Pertambahan Bobot</td>
+                                <td id="hasil-pertambahan-bobot-value" class="p-3 text-right value-cell"></td>
+                                <td id="hasil-pertambahan-bobot-unit" class="p-3 text-right"></td>
+                            </tr>
+                            <tr class="border-b border-slate-700">
+                                <td class="p-3">Rasio Konversi Pakan (FCR)</td>
+                                <td id="hasil-fcr-value" class="p-3 text-right value-cell"></td>
+                                <td id="hasil-fcr-unit" class="p-3 text-right"></td>
+                            </tr>
+                            <tr class="border-b border-slate-700">
+                                <td class="p-3">Efisiensi Pakan (EP)</td>
+                                <td id="hasil-ep-value" class="p-3 text-right value-cell"></td>
+                                <td id="hasil-ep-unit" class="p-3 text-right"></td>
+                            </tr>
+                            <tr class="border-b border-slate-700">
+                                <td class="p-3">Survival Rate (SR)</td>
+                                <td id="hasil-sr-value" class="p-3 text-right value-cell"></td>
+                                <td id="hasil-sr-unit" class="p-3 text-right"></td>
+                            </tr>
+                            <tr class="border-b border-slate-700">
+                                <td class="p-3">Specific Growth Rate (SGR)</td>
+                                <td id="hasil-sgr-value" class="p-3 text-right value-cell"></td>
+                                <td id="hasil-sgr-unit" class="p-3 text-right"></td>
+                            </tr>
+                            <tr class="border-b border-slate-700">
+                                <td class="p-3">Pertumbuhan Rata-rata</td>
+                                <td id="hasil-pertumbuhan-rata-value" class="p-3 text-right value-cell"></td>
+                                <td id="hasil-pertumbuhan-rata-unit" class="p-3 text-right"></td>
+                            </tr>
+                            <tr class="border-b border-slate-700">
+                                <td class="p-3">Bobot Rata-rata Panen</td>
+                                <td id="hasil-bobot-rata-panen-value" class="p-3 text-right value-cell"></td>
+                                <td id="hasil-bobot-rata-panen-unit" class="p-3 text-right"></td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 rounded-bl-lg">Pertumbuhan Harian (ADG)</td>
+                                <td id="hasil-adg-value" class="p-3 text-right value-cell"></td>
+                                <td id="hasil-adg-unit" class="p-3 text-right rounded-br-lg"></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <div id="status-fcr" class="mt-6 text-center"></div>
                 <div id="status-sr" class="mt-2 text-center"></div>
@@ -222,11 +252,30 @@
 
             <div class="card">
                  <h2 class="text-2xl font-bold mb-4 border-b border-slate-700 pb-4 flex items-center gap-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
-                    Perencanaan Pakan
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                    Rekomendasi & Perencanaan
                 </h2>
-                <div>
-                    <label for="target_fcr" class="block text-sm font-medium mb-1">Masukkan Target FCR Baru:</label>
+                <!-- Rekomendasi Pakan SNI -->
+                <div id="rekomendasi-pakan-container" class="bg-slate-800/50 p-4 rounded-lg">
+                    <p class="text-lg font-semibold text-slate-200">Rekomendasi Pakan Harian (SNI)</p>
+                    <div class="mt-3 space-y-4">
+                        <div>
+                            <label for="current_biomass" class="block text-sm font-medium mb-1">Total Biomassa Ikan Saat Ini</label>
+                            <input type="number" id="current_biomass" placeholder="Masukkan total bobot ikan saat ini" class="mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
+                        </div>
+                        <button id="recommend-btn" class="main-button w-full bg-teal-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-teal-700 transition-all duration-200">
+                           Dapatkan Rekomendasi
+                        </button>
+                    </div>
+                    <div id="recommendation-output" class="mt-4 space-y-1 text-sm" style="display: none;">
+                        <p>Bobot Rata-rata Ikan: <span id="rekomendasi-bobot-rata" class="font-bold"></span></p>
+                        <p>Persentase Pakan: <span id="rekomendasi-persentase" class="font-bold"></span> dari biomassa</p>
+                        <p>Jumlah Pakan Harian: <span id="rekomendasi-jumlah-pakan" class="font-bold"></span></p>
+                    </div>
+                </div>
+                <!-- Perencanaan Pakan -->
+                <div class="mt-6">
+                    <label for="target_fcr" class="block text-sm font-medium mb-1">Perencanaan Target FCR (setelah panen)</label>
                     <div class="flex space-x-2 mt-1">
                         <input type="number" id="target_fcr" value="1.2" step="0.1" class="block w-full px-3 py-2 rounded-md shadow-sm">
                         <button id="plan-btn" class="px-4 py-2 bg-slate-600 text-white font-semibold rounded-lg hover:bg-slate-700 transition-colors">Rencanakan</button>
@@ -243,144 +292,132 @@
 </div>
 
 <script>
-// --- SCRIPT UNTUK BACKGROUND INTERAKTIF ---
-const canvas = document.getElementById('interactive-bg');
+// --- SCRIPT UNTUK BACKGROUND PERIKANAN INTERAKTIF ---
+const canvas = document.getElementById('fishery-bg');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-let particlesArray;
+let fishArray = [];
+let ripplesArray = [];
 
-// Posisi mouse
 const mouse = {
     x: null,
-    y: null,
-    radius: (canvas.height/110) * (canvas.width/110)
-}
+    y: null
+};
 
-window.addEventListener('mousemove', 
-    function(event) {
-        mouse.x = event.x;
-        mouse.y = event.y;
+canvas.addEventListener('mousemove', function(event) {
+    mouse.x = event.x;
+    mouse.y = event.y;
+    if (Math.random() > 0.9) {
+        ripplesArray.push(new Ripple(mouse.x, mouse.y));
     }
-);
+});
+canvas.addEventListener('click', function(event) {
+    mouse.x = event.x;
+    mouse.y = event.y;
+    for (let i = 0; i < 5; i++) {
+         ripplesArray.push(new Ripple(mouse.x, mouse.y));
+    }
+});
 
-// Class untuk membuat satu partikel
-class Particle {
-    constructor(x, y, directionX, directionY, size, color) {
+
+class Ripple {
+    constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.directionX = directionX;
-        this.directionY = directionY;
-        this.size = size;
-        this.color = color;
+        this.radius = Math.random() * 5 + 1;
+        this.maxRadius = Math.random() * 20 + 30;
+        this.opacity = 1;
+        this.speed = Math.random() * 0.5 + 0.2;
     }
-    // Menggambar partikel
-    draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
-        ctx.fillStyle = 'rgba(165, 180, 252, 0.5)'; // Warna indigo-300 dengan transparansi
-        ctx.fill();
-    }
-    // Memperbarui posisi partikel
     update() {
-        if (this.x > canvas.width || this.x < 0) {
-            this.directionX = -this.directionX;
+        this.radius += this.speed;
+        if (this.radius > this.maxRadius) {
+            this.opacity -= 0.05;
         }
-        if (this.y > canvas.height || this.y < 0) {
-            this.directionY = -this.directionY;
-        }
-
-        // Cek deteksi tabrakan dengan mouse
-        let dx = mouse.x - this.x;
-        let dy = mouse.y - this.y;
-        let distance = Math.sqrt(dx*dx + dy*dy);
-        if (distance < mouse.radius + this.size){
-            if (mouse.x < this.x && this.x < canvas.width - this.size * 10) {
-                this.x += 3;
-            }
-            if (mouse.x > this.x && this.x > this.size * 10) {
-                this.x -= 3;
-            }
-            if (mouse.y < this.y && this.y < canvas.height - this.size * 10) {
-                this.y += 3;
-            }
-            if (mouse.y > this.y && this.y > this.size * 10) {
-                this.y -= 3;
-            }
-        }
-        // Gerakkan partikel
-        this.x += this.directionX;
-        this.y += this.directionY;
-        // Gambar partikel
-        this.draw();
+    }
+    draw() {
+        ctx.strokeStyle = `rgba(199, 210, 254, ${this.opacity})`; // indigo-200
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.stroke();
     }
 }
 
-// Membuat array partikel
+class Fish {
+    constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 5 + 8;
+        this.speed = Math.random() * 1.5 + 0.5;
+        this.angle = Math.random() * 2 * Math.PI;
+        this.turnSpeed = Math.random() * 0.04 - 0.02;
+        this.color = `hsla(200, 100%, ${Math.random() * 30 + 50}%, 0.6)`;
+    }
+    update() {
+        this.angle += this.turnSpeed;
+        this.x += this.speed * Math.cos(this.angle);
+        this.y += this.speed * Math.sin(this.angle);
+
+        if (this.x < -this.size) this.x = canvas.width + this.size;
+        if (this.x > canvas.width + this.size) this.x = -this.size;
+        if (this.y < -this.size) this.y = canvas.height + this.size;
+        if (this.y > canvas.height + this.size) this.y = -this.size;
+    }
+    draw() {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.angle);
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.quadraticCurveTo(this.size * 0.5, this.size * 0.4, this.size, 0);
+        ctx.quadraticCurveTo(this.size * 0.5, -this.size * 0.4, 0, 0);
+        ctx.moveTo(-this.size * 0.2, 0);
+        ctx.lineTo(-this.size * 0.4, -this.size * 0.2);
+        ctx.lineTo(-this.size * 0.4, this.size * 0.2);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+    }
+}
+
 function init() {
-    particlesArray = [];
-    let numberOfParticles = (canvas.height * canvas.width) / 9000;
-    for (let i = 0; i < numberOfParticles; i++) {
-        let size = (Math.random() * 2) + 1;
-        let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
-        let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
-        let directionX = (Math.random() * .4) - 0.2;
-        let directionY = (Math.random() * .4) - 0.2;
-        let color = '#818cf8';
-
-        particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+    fishArray = [];
+    let numberOfFish = 25;
+    for (let i = 0; i < numberOfFish; i++) {
+        fishArray.push(new Fish());
     }
 }
 
-// Membuat koneksi antar partikel
-function connect() {
-    let opacityValue = 1;
-    for (let a = 0; a < particlesArray.length; a++) {
-        for (let b = a; b < particlesArray.length; b++) {
-            let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x))
-            + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
-            if (distance < (canvas.width/7) * (canvas.height/7)) {
-                opacityValue = 1 - (distance/20000);
-                ctx.strokeStyle = 'rgba(199, 210, 254,' + opacityValue + ')'; // Warna indigo-200
-                ctx.lineWidth = 1;
-                ctx.beginPath();
-                ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
-                ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
-                ctx.stroke();
-            }
-        }
-    }
-}
-
-// Loop animasi
 function animate() {
-    requestAnimationFrame(animate);
-    ctx.clearRect(0,0,innerWidth, innerHeight);
+    const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    gradient.addColorStop(0, '#1e3a8a');
+    gradient.addColorStop(1, '#0c4a6e');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    for (let i = 0; i < particlesArray.length; i++) {
-        particlesArray[i].update();
-    }
-    connect();
+    ripplesArray.forEach((ripple, index) => {
+        ripple.update();
+        ripple.draw();
+        if (ripple.opacity <= 0) {
+            ripplesArray.splice(index, 1);
+        }
+    });
+    fishArray.forEach(fish => {
+        fish.update();
+        fish.draw();
+    });
+    requestAnimationFrame(animate);
 }
 
-// Event listener untuk resize window
-window.addEventListener('resize',
-    function(){
-        canvas.width = innerWidth;
-        canvas.height = innerHeight;
-        mouse.radius = ((canvas.height/110) * (canvas.width/110));
-        init();
-    }
-);
-
-// Event listener untuk mouse out
-window.addEventListener('mouseout', 
-    function(){
-        mouse.x = undefined;
-        mouse.y = undefined;
-    }
-)
+window.addEventListener('resize', function() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    init();
+});
 
 init();
 animate();
@@ -389,14 +426,25 @@ animate();
 // --- SCRIPT UNTUK LOGIKA KALKULATOR ---
 document.addEventListener('DOMContentLoaded', () => {
 
-    // KUMPULKAN SEMUA ELEMEN DOM
+    const sniData = {
+        lele: { name: 'Lele', ranges: [{ limit: 5, min: 7, max: 7 },{ limit: 15, min: 5, max: 5 },{ limit: 50, min: 4, max: 4 },{ limit: 100, min: 3, max: 3 },{ limit: Infinity, min: 2, max: 2 }] },
+        nila: { name: 'Nila', ranges: [{ limit: 5, min: 5, max: 7 },{ limit: 20, min: 4, max: 6 },{ limit: 100, min: 3, max: 4 },{ limit: Infinity, min: 2, max: 3 }] },
+        gurame: { name: 'Gurame', ranges: [{ limit: 25, min: 5, max: 7 },{ limit: 150, min: 3, max: 4 },{ limit: 500, min: 2, max: 3 },{ limit: Infinity, min: 1, max: 2 }] },
+        mas: { name: 'Ikan Mas', ranges: [{ limit: 20, min: 5, max: 5 },{ limit: 100, min: 4, max: 4 },{ limit: Infinity, min: 3, max: 3 }] },
+        patin: { name: 'Patin', ranges: [{ limit: 15, min: 5, max: 8 },{ limit: 100, min: 3, max: 5 },{ limit: 500, min: 2, max: 3 },{ limit: Infinity, min: 1, max: 2 }] },
+        bawal: { name: 'Bawal', ranges: [{ limit: 20, min: 4, max: 6 },{ limit: 100, min: 3, max: 5 },{ limit: 300, min: 2, max: 4 },{ limit: Infinity, min: 1, max: 3 }] }
+    };
+
     const elements = {
         calculateBtn: document.getElementById('calculate-btn'),
         planBtn: document.getElementById('plan-btn'),
+        recommendBtn: document.getElementById('recommend-btn'),
         resultContainer: document.getElementById('result-container'),
         errorMessage: document.getElementById('error-message'),
         planningResultEl: document.getElementById('planning-result'),
+        recommendationOutput: document.getElementById('recommendation-output'),
         inputs: {
+            fishType: document.getElementById('fish_type'),
             weightUnit: document.getElementById('weight_unit'),
             lamaBudidaya: document.getElementById('lama_budidaya'), 
             bobotAwal: document.getElementById('bobot_awal_tebar'),
@@ -405,30 +453,20 @@ document.addEventListener('DOMContentLoaded', () => {
             jumlahBibitAwal: document.getElementById('jumlah_bibit_awal'),
             jumlahIkanPanen: document.getElementById('jumlah_ikan_panen'),
             targetFcr: document.getElementById('target_fcr'),
+            currentBiomass: document.getElementById('current_biomass'),
         },
-        outputs: {
-            pertambahanBobot: document.getElementById('hasil-pertambahan-bobot'),
-            fcr: document.getElementById('hasil-fcr'),
-            ep: document.getElementById('hasil-ep'),
-            sr: document.getElementById('hasil-sr'),
-            sgr: document.getElementById('hasil-sgr'),
-            pertumbuhanRata: document.getElementById('hasil-pertumbuhan-rata'),
-            adg: document.getElementById('hasil-adg'), // Output baru
-        }
     };
     const appState = { 
-        pertambahanBobot: 0, // Akan disimpan dalam gram
-        totalPakan: 0, // Akan disimpan dalam gram
-        unit: 'kg' // Menyimpan unit terpilih
+        pertambahanBobot: 0,
+        totalPakan: 0,
+        unit: 'kg'
     };
     
-    // FUNGSI UTAMA KALKULASI
     const handleCalculation = () => {
-        // Reset pesan error
         elements.errorMessage.style.display = 'none';
-        elements.errorMessage.textContent = '';
         
         const unit = elements.inputs.weightUnit.value;
+        const fishType = elements.inputs.fishType.value;
         const conversionFactor = unit === 'kg' ? 1000 : 1;
 
         const inputs = {
@@ -440,7 +478,6 @@ document.addEventListener('DOMContentLoaded', () => {
             jumlahIkanPanen: parseInt(elements.inputs.jumlahIkanPanen.value),
         };
         
-        // Validasi input
         const validationError = validateInputs(inputs);
         if (validationError) {
             elements.errorMessage.textContent = `Error: ${validationError}`;
@@ -448,26 +485,65 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Konversi semua bobot ke gram untuk konsistensi perhitungan
         const inputsInGrams = {
             bobotAwal: inputs.bobotAwal * conversionFactor,
             totalPakan: inputs.totalPakan * conversionFactor,
             bobotPanen: inputs.bobotPanen * conversionFactor,
         };
 
-        // Lakukan kalkulasi
         const results = calculateMetrics(inputsInGrams, inputs.jumlahBibitAwal, inputs.jumlahIkanPanen, inputs.lamaBudidaya);
         
-        // Simpan state dalam gram
         appState.pertambahanBobot = results.pertambahanBobot;
         appState.totalPakan = inputsInGrams.totalPakan;
         appState.unit = unit;
         
-        // Perbarui tampilan UI
         updateUI(results, unit);
     };
 
-    // --- (Fungsi-fungsi pembantu lainnya) ---
+    const handleRecommendation = () => {
+        const unit = elements.inputs.weightUnit.value;
+        const fishType = elements.inputs.fishType.value;
+        const conversionFactor = unit === 'kg' ? 1000 : 1;
+
+        const currentBiomass = parseFloat(elements.inputs.currentBiomass.value);
+        const fishCount = parseInt(elements.inputs.jumlahIkanPanen.value) || parseInt(elements.inputs.jumlahBibitAwal.value);
+
+        if (isNaN(currentBiomass) || isNaN(fishCount) || currentBiomass <= 0 || fishCount <= 0) {
+            alert("Masukkan Total Biomassa Saat Ini dan pastikan data jumlah ikan sudah terisi.");
+            return;
+        }
+
+        const currentBiomassInGrams = currentBiomass * conversionFactor;
+        const avgWeightInGrams = currentBiomassInGrams / fishCount;
+        const selectedSni = sniData[fishType];
+        let feedPercentMin, feedPercentMax, percentText;
+
+        for (const range of selectedSni.ranges) {
+            if (avgWeightInGrams < range.limit) {
+                feedPercentMin = range.min;
+                feedPercentMax = range.max;
+                percentText = (feedPercentMin === feedPercentMax) ? `${feedPercentMin}%` : `${range.min}% - ${range.max}%`;
+                break;
+            }
+        }
+
+        const minFeed = currentBiomassInGrams * (feedPercentMin / 100);
+        const maxFeed = currentBiomassInGrams * (feedPercentMax / 100);
+        
+        let displayMinFeed = minFeed;
+        let displayMaxFeed = maxFeed;
+        if (unit === 'kg') {
+            displayMinFeed /= 1000;
+            displayMaxFeed /= 1000;
+        }
+
+        document.getElementById('rekomendasi-bobot-rata').textContent = `${avgWeightInGrams.toFixed(2)} g/ekor`;
+        document.getElementById('rekomendasi-persentase').textContent = percentText;
+        document.getElementById('rekomendasi-jumlah-pakan').textContent = `${displayMinFeed.toFixed(2)} - ${displayMaxFeed.toFixed(2)} ${unit}/hari`;
+        
+        elements.recommendationOutput.style.display = 'block';
+    };
+
     const validateInputs=(i)=>{if(Object.values(i).some(isNaN))return"Semua kolom harus diisi angka.";if(i.totalPakan<=0||i.jumlahBibitAwal<=0||i.lamaBudidaya<=0)return"Pakan, bibit awal, dan lama budidaya harus > 0.";if(i.bobotPanen<=i.bobotAwal)return"Bobot panen harus > bobot awal.";if(i.jumlahIkanPanen>i.jumlahBibitAwal)return"Ikan panen tidak boleh > bibit awal.";return null;};
     
     const calculateMetrics=(weightInputs, bibitAwal, ikanPanen, lamaBudidaya)=>{
@@ -475,27 +551,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const fcr = pB > 0 ? weightInputs.totalPakan / pB : 0;
         const ep = weightInputs.totalPakan > 0 ? (pB / weightInputs.totalPakan) * 100 : 0;
         const sr = (ikanPanen / bibitAwal) * 100;
-        
-        // Bobot rata-rata awal dan akhir per ekor
         const w1 = weightInputs.bobotAwal / bibitAwal; 
         const w2 = weightInputs.bobotPanen / ikanPanen;
-        
-        // Perhitungan SGR
         let sgr = 0;
-        if (w1 > 0 && w2 > 0 && lamaBudidaya > 0) {
-            sgr = ((Math.log(w2) - Math.log(w1)) / lamaBudidaya) * 100;
-        }
-
-        // Perhitungan Pertumbuhan Rata-rata per Ekor
+        if (w1 > 0 && w2 > 0 && lamaBudidaya > 0) sgr = ((Math.log(w2) - Math.log(w1)) / lamaBudidaya) * 100;
         const pertumbuhanRata = ikanPanen > 0 ? pB / ikanPanen : 0;
-
-        // Perhitungan Pertumbuhan Harian Rata-rata (ADG)
         let adg = 0;
-        if (lamaBudidaya > 0) {
-            adg = (w2 - w1) / lamaBudidaya;
-        }
-
-        return { pertambahanBobot: pB, fcr, ep, sr, sgr, pertumbuhanRata, adg };
+        if (lamaBudidaya > 0) adg = (w2 - w1) / lamaBudidaya;
+        return { pertambahanBobot: pB, fcr, ep, sr, sgr, pertumbuhanRata, adg, bobotRataPanen: w2 };
     };
 
     const displayStatus=(el,t,bg,c)=>{el.innerHTML=`<span class="status-badge" style="background-color:${bg};color:${c};">${t}</span>`;};
@@ -503,29 +566,40 @@ document.addEventListener('DOMContentLoaded', () => {
     const updateUI=(r, unit)=>{
         let displayWeight = r.pertambahanBobot;
         let displayPertumbuhanRata = r.pertumbuhanRata;
-
         if (unit === 'kg') {
             displayWeight /= 1000;
             displayPertumbuhanRata /= 1000;
         }
 
-        elements.outputs.pertambahanBobot.textContent=`${displayWeight.toFixed(2)} ${unit}`;
-        elements.outputs.fcr.textContent=r.fcr.toFixed(2);
-        elements.outputs.ep.textContent=`${r.ep.toFixed(2)} %`;
-        elements.outputs.sr.textContent=`${r.sr.toFixed(2)} %`;
-        elements.outputs.sgr.textContent=`${r.sgr.toFixed(2)} %/hari`;
-        elements.outputs.pertumbuhanRata.textContent = `${displayPertumbuhanRata.toFixed(2)} ${unit}/ekor`;
-        elements.outputs.adg.textContent = `${r.adg.toFixed(2)} g/ekor/hari`; // Tampilkan ADG
+        document.getElementById('hasil-pertambahan-bobot-value').textContent = displayWeight.toFixed(2);
+        document.getElementById('hasil-pertambahan-bobot-unit').textContent = unit;
+        document.getElementById('hasil-fcr-value').textContent = r.fcr.toFixed(2);
+        document.getElementById('hasil-fcr-unit').textContent = '-';
+        document.getElementById('hasil-ep-value').textContent = r.ep.toFixed(2);
+        document.getElementById('hasil-ep-unit').textContent = '%';
+        document.getElementById('hasil-sr-value').textContent = r.sr.toFixed(2);
+        document.getElementById('hasil-sr-unit').textContent = '%';
+        document.getElementById('hasil-sgr-value').textContent = r.sgr.toFixed(2);
+        document.getElementById('hasil-sgr-unit').textContent = '%/hari';
+        document.getElementById('hasil-pertumbuhan-rata-value').textContent = displayPertumbuhanRata.toFixed(2);
+        document.getElementById('hasil-pertumbuhan-rata-unit').textContent = `${unit}/ekor`;
+        document.getElementById('hasil-bobot-rata-panen-value').textContent = r.bobotRataPanen.toFixed(2);
+        document.getElementById('hasil-bobot-rata-panen-unit').textContent = 'g/ekor';
+        document.getElementById('hasil-adg-value').textContent = r.adg.toFixed(2);
+        document.getElementById('hasil-adg-unit').textContent = 'g/ekor/hari';
         
-        // Hapus status lama sebelum menambahkan yang baru
         const statusFcrEl = document.getElementById('status-fcr');
         const statusSrEl = document.getElementById('status-sr');
         if (statusFcrEl) statusFcrEl.innerHTML = '';
         if (statusSrEl) statusSrEl.innerHTML = '';
 
-
-        if(r.fcr>0&&r.fcr<1.0){displayStatus(statusFcrEl,'🟢 FCR Sangat Efisien','#dcfce7','#166534');}else if(r.fcr<=1.2){displayStatus(statusFcrEl,'🔵 FCR Efisien','#dbeafe','#1e40af');}else if(r.fcr<=1.5){displayStatus(statusFcrEl,'🟡 FCR Cukup Efisien','#fef9c3','#854d0e');}else{displayStatus(statusFcrEl,'🔴 FCR Kurang Efisien','#fee2e2','#991b1b');}
-        if(r.sr>=80){displayStatus(statusSrEl,'✅ SR Berhasil (di atas 80%)','#dcfce7','#166534');}else{displayStatus(statusSrEl,'⚠️ SR Perlu Evaluasi (di bawah 80%)','#fef9c3','#854d0e');}
+        if(r.fcr>0&&r.fcr<1.0)displayStatus(statusFcrEl,'🟢 FCR Sangat Efisien','#dcfce7','#166534');
+        else if(r.fcr<=1.2)displayStatus(statusFcrEl,'🔵 FCR Efisien','#dbeafe','#1e40af');
+        else if(r.fcr<=1.5)displayStatus(statusFcrEl,'🟡 FCR Cukup Efisien','#fef9c3','#854d0e');
+        else displayStatus(statusFcrEl,'🔴 FCR Kurang Efisien','#fee2e2','#991b1b');
+        
+        if(r.sr>=80)displayStatus(statusSrEl,'✅ SR Berhasil (di atas 80%)','#dcfce7','#166534');
+        else displayStatus(statusSrEl,'⚠️ SR Perlu Evaluasi (di bawah 80%)','#fef9c3','#854d0e');
         
         elements.resultContainer.style.display='block';
     };
@@ -541,31 +615,26 @@ document.addEventListener('DOMContentLoaded', () => {
         const unit = appState.unit;
         const pakanIdealInGrams = appState.pertambahanBobot * tFcr;
         const selisihPakanInGrams = appState.totalPakan - pakanIdealInGrams;
-
         let displayPakanIdeal = pakanIdealInGrams;
         let displaySelisih = selisihPakanInGrams;
-
         if (unit === 'kg') {
             displayPakanIdeal /= 1000;
             displaySelisih /= 1000;
         }
 
         let resHTML=`<p>Dengan target FCR <strong>${tFcr.toFixed(2)}</strong>, pakan idealnya <strong>${displayPakanIdeal.toFixed(2)} ${unit}</strong>.</p>`;
-        if(displaySelisih > 0.01){
-            resHTML+=`<p class="mt-2 font-semibold text-green-400">Anda berpotensi HEMAT pakan ${displaySelisih.toFixed(2)} ${unit}.</p>`;
-        } else if(displaySelisih < -0.01){
+        if(displaySelisih > 0.01) resHTML+=`<p class="mt-2 font-semibold text-green-400">Anda berpotensi HEMAT pakan ${displaySelisih.toFixed(2)} ${unit}.</p>`;
+        else if(displaySelisih < -0.01) {
             const fcrSaatIni=appState.totalPakan/appState.pertambahanBobot;
             resHTML+=`<p class="mt-2 font-semibold text-blue-400">FCR Anda (${fcrSaatIni.toFixed(2)}) sudah lebih baik dari target.</p>`;
-        } else {
-            resHTML+=`<p class="mt-2 font-semibold">Target FCR sama dengan capaian.</p>`;
-        }
+        } else resHTML+=`<p class="mt-2 font-semibold">Target FCR sama dengan capaian.</p>`;
         
         elements.planningResultEl.innerHTML=resHTML;
         elements.planningResultEl.style.display='block';
     };
 
-    // Tambahkan event listener ke tombol
     elements.calculateBtn.addEventListener('click', handleCalculation);
+    elements.recommendBtn.addEventListener('click', handleRecommendation);
     elements.planBtn.addEventListener('click', handlePlanning);
 });
 </script>
