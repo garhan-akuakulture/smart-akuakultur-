@@ -68,32 +68,34 @@
             border-color: #6366f1 !important; /* focus:border-indigo-500 */
             --tw-ring-color: #6366f1 !important; /* focus:ring-indigo-500 */
         }
-        /* Gaya untuk tabel hasil yang lebih jelas */
-        .result-table th {
-            color: #94a3b8; /* slate-400 */
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+        /* Gaya untuk daftar hasil */
+        .result-item { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 1rem 0.5rem; 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: background-color 0.2s ease-in-out;
         }
-        .result-table td {
-            color: #cbd5e1; /* slate-300 */
-        }
-        .result-table .value-cell {
-            color: #ffffff; /* Putih terang untuk nilai */
-            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-            font-weight: 700; /* Lebih tebal */
-        }
-        .result-table .unit-cell {
-            color: #64748b; /* slate-500, lebih redup untuk satuan */
-        }
-        .result-table tr {
-            border-bottom: 1px solid #334155; /* Garis batas lebih jelas */
-        }
-        .result-table tr:last-child {
-            border-bottom: none;
-        }
-        .result-table tr:hover td {
+        .result-item:hover {
             background-color: rgba(255, 255, 255, 0.05);
+        }
+        .result-item:last-child { 
+            border-bottom: none; 
+        }
+        .result-item span:first-child {
+            color: #94a3b8; /* slate-400 */
+        }
+        .result-item span:last-child {
+            color: #ffffff;
+            font-weight: 700;
+        }
+        .status-badge { 
+            display:inline-block; 
+            padding: 0.5rem 1rem; 
+            border-radius: 9999px; 
+            font-weight: 600; 
+            font-size: 0.875rem;
         }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -202,58 +204,39 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                     Hasil Analisis
                 </h2>
-                <div class="mt-4 overflow-x-auto">
-                    <table class="w-full text-sm text-left result-table">
-                        <thead class="bg-slate-800/50">
-                            <tr>
-                                <th class="p-3 rounded-tl-lg">Parameter</th>
-                                <th class="p-3 text-right">Nilai</th>
-                                <th class="p-3 text-right rounded-tr-lg">Satuan</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="p-3">Pertambahan Bobot</td>
-                                <td id="hasil-pertambahan-bobot-value" class="p-3 text-right value-cell"></td>
-                                <td id="hasil-pertambahan-bobot-unit" class="p-3 text-right unit-cell"></td>
-                            </tr>
-                            <tr>
-                                <td class="p-3">Rasio Konversi Pakan (FCR)</td>
-                                <td id="hasil-fcr-value" class="p-3 text-right value-cell"></td>
-                                <td id="hasil-fcr-unit" class="p-3 text-right unit-cell"></td>
-                            </tr>
-                            <tr>
-                                <td class="p-3">Efisiensi Pakan (EP)</td>
-                                <td id="hasil-ep-value" class="p-3 text-right value-cell"></td>
-                                <td id="hasil-ep-unit" class="p-3 text-right unit-cell"></td>
-                            </tr>
-                            <tr>
-                                <td class="p-3">Survival Rate (SR)</td>
-                                <td id="hasil-sr-value" class="p-3 text-right value-cell"></td>
-                                <td id="hasil-sr-unit" class="p-3 text-right unit-cell"></td>
-                            </tr>
-                            <tr>
-                                <td class="p-3">Specific Growth Rate (SGR)</td>
-                                <td id="hasil-sgr-value" class="p-3 text-right value-cell"></td>
-                                <td id="hasil-sgr-unit" class="p-3 text-right unit-cell"></td>
-                            </tr>
-                            <tr>
-                                <td class="p-3">Pertumbuhan Rata-rata</td>
-                                <td id="hasil-pertumbuhan-rata-value" class="p-3 text-right value-cell"></td>
-                                <td id="hasil-pertumbuhan-rata-unit" class="p-3 text-right unit-cell"></td>
-                            </tr>
-                            <tr>
-                                <td class="p-3">Bobot Rata-rata Panen</td>
-                                <td id="hasil-bobot-rata-panen-value" class="p-3 text-right value-cell"></td>
-                                <td id="hasil-bobot-rata-panen-unit" class="p-3 text-right unit-cell"></td>
-                            </tr>
-                            <tr>
-                                <td class="p-3 rounded-bl-lg">Pertumbuhan Harian (ADG)</td>
-                                <td id="hasil-adg-value" class="p-3 text-right value-cell"></td>
-                                <td id="hasil-adg-unit" class="p-3 text-right rounded-br-lg unit-cell"></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="mt-4 space-y-2">
+                    <div class="result-item">
+                        <span>Pertambahan Bobot</span>
+                        <span id="hasil-pertambahan-bobot" class="font-bold text-lg"></span>
+                    </div>
+                    <div class="result-item">
+                        <span>Rasio Konversi Pakan (FCR)</span>
+                        <span id="hasil-fcr" class="font-bold text-lg"></span>
+                    </div>
+                    <div class="result-item">
+                        <span>Efisiensi Pakan (EP)</span>
+                        <span id="hasil-ep" class="font-bold text-lg"></span>
+                    </div>
+                    <div class="result-item">
+                        <span>Survival Rate (SR)</span>
+                        <span id="hasil-sr" class="font-bold text-lg"></span>
+                    </div>
+                    <div class="result-item">
+                        <span>Specific Growth Rate (SGR)</span>
+                        <span id="hasil-sgr" class="font-bold text-lg"></span>
+                    </div>
+                    <div class="result-item">
+                        <span>Pertumbuhan Rata-rata</span>
+                        <span id="hasil-pertumbuhan-rata" class="font-bold text-lg"></span>
+                    </div>
+                    <div class="result-item">
+                        <span>Bobot Rata-rata Panen</span>
+                        <span id="hasil-bobot-rata-panen" class="font-bold text-lg"></span>
+                    </div>
+                    <div class="result-item">
+                        <span>Pertumbuhan Harian (ADG)</span>
+                        <span id="hasil-adg" class="font-bold text-lg"></span>
+                    </div>
                 </div>
                 <div id="status-fcr" class="mt-6 text-center"></div>
                 <div id="status-sr" class="mt-2 text-center"></div>
@@ -464,6 +447,16 @@ document.addEventListener('DOMContentLoaded', () => {
             targetFcr: document.getElementById('target_fcr'),
             currentBiomass: document.getElementById('current_biomass'),
         },
+        outputs: {
+            pertambahanBobot: document.getElementById('hasil-pertambahan-bobot'),
+            fcr: document.getElementById('hasil-fcr'),
+            ep: document.getElementById('hasil-ep'),
+            sr: document.getElementById('hasil-sr'),
+            sgr: document.getElementById('hasil-sgr'),
+            pertumbuhanRata: document.getElementById('hasil-pertumbuhan-rata'),
+            bobotRataPanen: document.getElementById('hasil-bobot-rata-panen'),
+            adg: document.getElementById('hasil-adg'),
+        }
     };
     const appState = { 
         pertambahanBobot: 0,
@@ -580,22 +573,14 @@ document.addEventListener('DOMContentLoaded', () => {
             displayPertumbuhanRata /= 1000;
         }
 
-        document.getElementById('hasil-pertambahan-bobot-value').textContent = displayWeight.toFixed(2);
-        document.getElementById('hasil-pertambahan-bobot-unit').textContent = unit;
-        document.getElementById('hasil-fcr-value').textContent = r.fcr.toFixed(2);
-        document.getElementById('hasil-fcr-unit').textContent = '-';
-        document.getElementById('hasil-ep-value').textContent = r.ep.toFixed(2);
-        document.getElementById('hasil-ep-unit').textContent = '%';
-        document.getElementById('hasil-sr-value').textContent = r.sr.toFixed(2);
-        document.getElementById('hasil-sr-unit').textContent = '%';
-        document.getElementById('hasil-sgr-value').textContent = r.sgr.toFixed(2);
-        document.getElementById('hasil-sgr-unit').textContent = '%/hari';
-        document.getElementById('hasil-pertumbuhan-rata-value').textContent = displayPertumbuhanRata.toFixed(2);
-        document.getElementById('hasil-pertumbuhan-rata-unit').textContent = `${unit}/ekor`;
-        document.getElementById('hasil-bobot-rata-panen-value').textContent = r.bobotRataPanen.toFixed(2);
-        document.getElementById('hasil-bobot-rata-panen-unit').textContent = 'g/ekor';
-        document.getElementById('hasil-adg-value').textContent = r.adg.toFixed(2);
-        document.getElementById('hasil-adg-unit').textContent = 'g/ekor/hari';
+        elements.outputs.pertambahanBobot.textContent = `${displayWeight.toFixed(2)} ${unit}`;
+        elements.outputs.fcr.textContent = r.fcr.toFixed(2);
+        elements.outputs.ep.textContent = `${r.ep.toFixed(2)} %`;
+        elements.outputs.sr.textContent = `${r.sr.toFixed(2)} %`;
+        elements.outputs.sgr.textContent = `${r.sgr.toFixed(2)} %/hari`;
+        elements.outputs.pertumbuhanRata.textContent = `${displayPertumbuhanRata.toFixed(2)} ${unit}/ekor`;
+        elements.outputs.bobotRataPanen.textContent = `${r.bobotRataPanen.toFixed(2)} g/ekor`;
+        elements.outputs.adg.textContent = `${r.adg.toFixed(2)} g/ekor/hari`;
         
         const statusFcrEl = document.getElementById('status-fcr');
         const statusSrEl = document.getElementById('status-sr');
