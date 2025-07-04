@@ -113,12 +113,18 @@
                 Data Siklus Panen
             </h2>
             <div class="space-y-5">
-                <div>
-                    <label for="weight_unit" class="block text-sm font-medium mb-1">Satuan Bobot</label>
-                    <select id="weight_unit" class="mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
-                        <option value="kg">Kilogram (kg)</option>
-                        <option value="g">Gram (g)</option>
-                    </select>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="weight_unit" class="block text-sm font-medium mb-1">Satuan Bobot</label>
+                        <select id="weight_unit" class="mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
+                            <option value="kg">Kilogram (kg)</option>
+                            <option value="g">Gram (g)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="lama_budidaya" class="block text-sm font-medium mb-1">Lama Budidaya (hari)</label>
+                        <input type="number" id="lama_budidaya" placeholder="Contoh: 90" class="mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
+                    </div>
                 </div>
                 <hr class="border-slate-700">
                 <div>
@@ -196,6 +202,18 @@
                     <div class="result-item">
                         <span>Survival Rate (SR)</span>
                         <span id="hasil-sr" class="font-bold text-lg"></span>
+                    </div>
+                    <div class="result-item">
+                        <span>Specific Growth Rate (SGR)</span>
+                        <span id="hasil-sgr" class="font-bold text-lg"></span>
+                    </div>
+                    <div class="result-item">
+                        <span>Pertumbuhan Rata-rata</span>
+                        <span id="hasil-pertumbuhan-rata" class="font-bold text-lg"></span>
+                    </div>
+                    <div class="result-item">
+                        <span>Pertumbuhan Harian (ADG)</span>
+                        <span id="hasil-adg" class="font-bold text-lg"></span>
                     </div>
                 </div>
                 <div id="status-fcr" class="mt-6 text-center"></div>
@@ -379,7 +397,8 @@ document.addEventListener('DOMContentLoaded', () => {
         errorMessage: document.getElementById('error-message'),
         planningResultEl: document.getElementById('planning-result'),
         inputs: {
-            weightUnit: document.getElementById('weight_unit'), // Elemen baru
+            weightUnit: document.getElementById('weight_unit'),
+            lamaBudidaya: document.getElementById('lama_budidaya'), 
             bobotAwal: document.getElementById('bobot_awal_tebar'),
             totalPakan: document.getElementById('total_pakan'),
             bobotPanen: document.getElementById('bobot_panen'),
@@ -392,8 +411,9 @@ document.addEventListener('DOMContentLoaded', () => {
             fcr: document.getElementById('hasil-fcr'),
             ep: document.getElementById('hasil-ep'),
             sr: document.getElementById('hasil-sr'),
-            statusFcr: document.getElementById('status-fcr'),
-            statusSr: document.getElementById('status-sr'),
+            sgr: document.getElementById('hasil-sgr'),
+            pertumbuhanRata: document.getElementById('hasil-pertumbuhan-rata'),
+            adg: document.getElementById('hasil-adg'), // Output baru
         }
     };
     const appState = { 
@@ -412,6 +432,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const conversionFactor = unit === 'kg' ? 1000 : 1;
 
         const inputs = {
+            lamaBudidaya: parseInt(elements.inputs.lamaBudidaya.value),
             bobotAwal: parseFloat(elements.inputs.bobotAwal.value),
             totalPakan: parseFloat(elements.inputs.totalPakan.value),
             bobotPanen: parseFloat(elements.inputs.bobotPanen.value),
@@ -435,7 +456,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         // Lakukan kalkulasi
-        const results = calculateMetrics(inputsInGrams, inputs.jumlahBibitAwal, inputs.jumlahIkanPanen);
+        const results = calculateMetrics(inputsInGrams, inputs.jumlahBibitAwal, inputs.jumlahIkanPanen, inputs.lamaBudidaya);
         
         // Simpan state dalam gram
         appState.pertambahanBobot = results.pertambahanBobot;
@@ -447,31 +468,64 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- (Fungsi-fungsi pembantu lainnya) ---
-    const validateInputs=(i)=>{if(Object.values(i).some(isNaN))return"Semua kolom harus diisi angka.";if(i.totalPakan<=0||i.jumlahBibitAwal<=0)return"Total pakan & bibit awal harus > 0.";if(i.bobotPanen<=i.bobotAwal)return"Bobot panen harus > bobot awal.";if(i.jumlahIkanPanen>i.jumlahBibitAwal)return"Ikan panen tidak boleh > bibit awal.";return null;};
+    const validateInputs=(i)=>{if(Object.values(i).some(isNaN))return"Semua kolom harus diisi angka.";if(i.totalPakan<=0||i.jumlahBibitAwal<=0||i.lamaBudidaya<=0)return"Pakan, bibit awal, dan lama budidaya harus > 0.";if(i.bobotPanen<=i.bobotAwal)return"Bobot panen harus > bobot awal.";if(i.jumlahIkanPanen>i.jumlahBibitAwal)return"Ikan panen tidak boleh > bibit awal.";return null;};
     
-    const calculateMetrics=(weightInputs, bibitAwal, ikanPanen)=>{
+    const calculateMetrics=(weightInputs, bibitAwal, ikanPanen, lamaBudidaya)=>{
         const pB = weightInputs.bobotPanen - weightInputs.bobotAwal;
         const fcr = pB > 0 ? weightInputs.totalPakan / pB : 0;
         const ep = weightInputs.totalPakan > 0 ? (pB / weightInputs.totalPakan) * 100 : 0;
         const sr = (ikanPanen / bibitAwal) * 100;
-        return { pertambahanBobot: pB, fcr, ep, sr };
+        
+        // Bobot rata-rata awal dan akhir per ekor
+        const w1 = weightInputs.bobotAwal / bibitAwal; 
+        const w2 = weightInputs.bobotPanen / ikanPanen;
+        
+        // Perhitungan SGR
+        let sgr = 0;
+        if (w1 > 0 && w2 > 0 && lamaBudidaya > 0) {
+            sgr = ((Math.log(w2) - Math.log(w1)) / lamaBudidaya) * 100;
+        }
+
+        // Perhitungan Pertumbuhan Rata-rata per Ekor
+        const pertumbuhanRata = ikanPanen > 0 ? pB / ikanPanen : 0;
+
+        // Perhitungan Pertumbuhan Harian Rata-rata (ADG)
+        let adg = 0;
+        if (lamaBudidaya > 0) {
+            adg = (w2 - w1) / lamaBudidaya;
+        }
+
+        return { pertambahanBobot: pB, fcr, ep, sr, sgr, pertumbuhanRata, adg };
     };
 
     const displayStatus=(el,t,bg,c)=>{el.innerHTML=`<span class="status-badge" style="background-color:${bg};color:${c};">${t}</span>`;};
     
     const updateUI=(r, unit)=>{
         let displayWeight = r.pertambahanBobot;
+        let displayPertumbuhanRata = r.pertumbuhanRata;
+
         if (unit === 'kg') {
             displayWeight /= 1000;
+            displayPertumbuhanRata /= 1000;
         }
 
         elements.outputs.pertambahanBobot.textContent=`${displayWeight.toFixed(2)} ${unit}`;
         elements.outputs.fcr.textContent=r.fcr.toFixed(2);
         elements.outputs.ep.textContent=`${r.ep.toFixed(2)} %`;
         elements.outputs.sr.textContent=`${r.sr.toFixed(2)} %`;
+        elements.outputs.sgr.textContent=`${r.sgr.toFixed(2)} %/hari`;
+        elements.outputs.pertumbuhanRata.textContent = `${displayPertumbuhanRata.toFixed(2)} ${unit}/ekor`;
+        elements.outputs.adg.textContent = `${r.adg.toFixed(2)} g/ekor/hari`; // Tampilkan ADG
         
-        if(r.fcr>0&&r.fcr<1.0){displayStatus(elements.outputs.statusFcr,'🟢 FCR Sangat Efisien','#dcfce7','#166534');}else if(r.fcr<=1.2){displayStatus(elements.outputs.statusFcr,'🔵 FCR Efisien','#dbeafe','#1e40af');}else if(r.fcr<=1.5){displayStatus(elements.outputs.statusFcr,'🟡 FCR Cukup Efisien','#fef9c3','#854d0e');}else{displayStatus(elements.outputs.statusFcr,'🔴 FCR Kurang Efisien','#fee2e2','#991b1b');}
-        if(r.sr>=80){displayStatus(elements.outputs.statusSr,'✅ SR Berhasil (di atas 80%)','#dcfce7','#166534');}else{displayStatus(elements.outputs.statusSr,'⚠️ SR Perlu Evaluasi (di bawah 80%)','#fef9c3','#854d0e');}
+        // Hapus status lama sebelum menambahkan yang baru
+        const statusFcrEl = document.getElementById('status-fcr');
+        const statusSrEl = document.getElementById('status-sr');
+        if (statusFcrEl) statusFcrEl.innerHTML = '';
+        if (statusSrEl) statusSrEl.innerHTML = '';
+
+
+        if(r.fcr>0&&r.fcr<1.0){displayStatus(statusFcrEl,'🟢 FCR Sangat Efisien','#dcfce7','#166534');}else if(r.fcr<=1.2){displayStatus(statusFcrEl,'🔵 FCR Efisien','#dbeafe','#1e40af');}else if(r.fcr<=1.5){displayStatus(statusFcrEl,'🟡 FCR Cukup Efisien','#fef9c3','#854d0e');}else{displayStatus(statusFcrEl,'🔴 FCR Kurang Efisien','#fee2e2','#991b1b');}
+        if(r.sr>=80){displayStatus(statusSrEl,'✅ SR Berhasil (di atas 80%)','#dcfce7','#166534');}else{displayStatus(statusSrEl,'⚠️ SR Perlu Evaluasi (di bawah 80%)','#fef9c3','#854d0e');}
         
         elements.resultContainer.style.display='block';
     };
