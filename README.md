@@ -142,7 +142,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', () => {
 
-    // URL WEB APP ANDA SUDAH DIMASUKKAN DI SINI
+    // URL WEB APP ANDA SUDAH DIPERBARUI DI SINI
     const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxYTVTySvme1I2dH1m8mmDtgmVwia9dAjd6ve0FsA2PQkQB-rThJG3XzcFxGis7D40k/exec';
 
     // KUMPULKAN SEMUA ELEMEN DOM
