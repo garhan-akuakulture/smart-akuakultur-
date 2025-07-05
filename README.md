@@ -41,15 +41,6 @@
             box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
             border-color: rgba(255, 255, 255, 0.2);
         }
-        .input-icon {
-            position: absolute;
-            inset-y: 0;
-            left: 0;
-            display: flex;
-            align-items: center;
-            padding-left: 0.75rem; /* 12px */
-            color: #94a3b8; /* slate-400 */
-        }
         .main-button {
             display: flex;
             align-items: center;
@@ -133,7 +124,7 @@
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label for="weight_unit" class="block text-sm font-medium mb-1">Satuan Bobot</label>
+                        <label for="weight_unit" class="block text-sm font-medium mb-1">Satuan Bobot (Total)</label>
                         <select id="weight_unit" class="mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
                             <option value="kg">Kilogram (kg)</option>
                             <option value="g">Gram (g)</option>
@@ -145,39 +136,54 @@
                     </div>
                 </div>
                 <hr class="border-slate-700">
-                <div>
-                    <label for="bobot_awal_tebar" class="flex items-center text-sm font-medium mb-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" /></svg>
-                        <span>Total Bobot Awal</span>
-                    </label>
-                    <input type="number" id="bobot_awal_tebar" placeholder="Contoh: 10" class="mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
+
+                <!-- KELOMPOK BOBOT AWAL -->
+                <div class="p-4 border border-slate-700 rounded-lg space-y-4">
+                    <h3 class="font-semibold text-slate-300">Data Bobot Awal</h3>
+                    <div>
+                        <label for="bobot_awal_type" class="block text-sm font-medium mb-1">Jenis Input</label>
+                        <select id="bobot_awal_type" class="mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
+                            <option value="total">Total Bobot</option>
+                            <option value="rata">Rata-rata Bobot</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label id="label_bobot_awal" for="bobot_awal_tebar" class="flex items-center text-sm font-medium mb-1">Total Bobot Awal</label>
+                        <input type="number" id="bobot_awal_tebar" placeholder="Contoh: 10" class="mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
+                    </div>
                 </div>
+
+                <!-- KELOMPOK BOBOT PANEN -->
+                <div class="p-4 border border-slate-700 rounded-lg space-y-4">
+                    <h3 class="font-semibold text-slate-300">Data Bobot Panen</h3>
+                    <div>
+                        <label for="bobot_panen_type" class="block text-sm font-medium mb-1">Jenis Input</label>
+                        <select id="bobot_panen_type" class="mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
+                            <option value="total">Total Bobot</option>
+                            <option value="rata">Rata-rata Bobot</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label id="label_bobot_panen" for="bobot_panen" class="flex items-center text-sm font-medium mb-1">Total Bobot Panen</label>
+                        <input type="number" id="bobot_panen" placeholder="Contoh: 110" class="mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
+                    </div>
+                </div>
+
+                <!-- INPUT PAKAN -->
                 <div>
-                    <label for="total_pakan" class="flex items-center text-sm font-medium mb-1">
-                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
-                        <span>Total Pakan Dihabiskan</span>
-                    </label>
+                    <label for="total_pakan" class="flex items-center text-sm font-medium mb-1">Total Pakan Dihabiskan</label>
                     <input type="number" id="total_pakan" placeholder="Contoh: 120" class="mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
                 </div>
+
+                <hr class="border-slate-700">
+
+                <!-- KELOMPOK JUMLAH IKAN -->
                 <div>
-                    <label for="bobot_panen" class="flex items-center text-sm font-medium mb-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
-                        <span>Total Bobot Panen</span>
-                    </label>
-                    <input type="number" id="bobot_panen" placeholder="Contoh: 110" class="mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
-                </div>
-                <div>
-                    <label for="jumlah_bibit_awal" class="flex items-center text-sm font-medium mb-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
-                        <span>Jumlah Bibit Awal (ekor)</span>
-                    </label>
+                    <label for="jumlah_bibit_awal" class="flex items-center text-sm font-medium mb-1">Jumlah Bibit Awal (ekor)</label>
                     <input type="number" id="jumlah_bibit_awal" placeholder="Contoh: 1000" class="mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
                 </div>
                 <div>
-                    <label for="jumlah_ikan_panen" class="flex items-center text-sm font-medium mb-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M15 21v-1a6 6 0 00-1.781-4.121M12 4.354a4 4 0 000 5.292M3 15a4 4 0 014 4v1h4v-1a4 4 0 014-4h3m-4-6a4 4 0 014-4h3" /></svg>
-                        <span>Jumlah Ikan Panen (ekor)</span>
-                    </label>
+                    <label for="jumlah_ikan_panen" class="flex items-center text-sm font-medium mb-1">Jumlah Ikan Panen (ekor)</label>
                     <input type="number" id="jumlah_ikan_panen" placeholder="Contoh: 950" class="mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
                 </div>
             </div>
@@ -419,12 +425,18 @@ document.addEventListener('DOMContentLoaded', () => {
             fishType: document.getElementById('fish_type'),
             weightUnit: document.getElementById('weight_unit'),
             lamaBudidaya: document.getElementById('lama_budidaya'), 
-            bobotAwal: document.getElementById('bobot_awal_tebar'),
-            totalPakan: document.getElementById('total_pakan'),
+            bobotAwalTebar: document.getElementById('bobot_awal_tebar'),
             bobotPanen: document.getElementById('bobot_panen'),
+            totalPakan: document.getElementById('total_pakan'),
             jumlahBibitAwal: document.getElementById('jumlah_bibit_awal'),
             jumlahIkanPanen: document.getElementById('jumlah_ikan_panen'),
             targetFcr: document.getElementById('target_fcr'),
+            bobotAwalType: document.getElementById('bobot_awal_type'),
+            bobotPanenType: document.getElementById('bobot_panen_type'),
+        },
+        labels: {
+            bobotAwal: document.getElementById('label_bobot_awal'),
+            bobotPanen: document.getElementById('label_bobot_panen'),
         },
         outputs: {
             pertambahanBobot: document.getElementById('hasil-pertambahan-bobot'),
@@ -443,6 +455,26 @@ document.addEventListener('DOMContentLoaded', () => {
         unit: 'kg'
     };
     
+    function updateInputLabels() {
+        const unit = elements.inputs.weightUnit.value;
+        
+        if (elements.inputs.bobotAwalType.value === 'total') {
+            elements.labels.bobotAwal.textContent = `Total Bobot Awal (${unit})`;
+            elements.inputs.bobotAwalTebar.placeholder = `Contoh: 10`;
+        } else {
+            elements.labels.bobotAwal.textContent = 'Rata-rata Bobot Awal (g/ekor)';
+            elements.inputs.bobotAwalTebar.placeholder = `Contoh: 7`;
+        }
+        
+        if (elements.inputs.bobotPanenType.value === 'total') {
+            elements.labels.bobotPanen.textContent = `Total Bobot Panen (${unit})`;
+            elements.inputs.bobotPanen.placeholder = `Contoh: 110`;
+        } else {
+            elements.labels.bobotPanen.textContent = 'Rata-rata Bobot Panen (g/ekor)';
+            elements.inputs.bobotPanen.placeholder = `Contoh: 120`;
+        }
+    }
+
     const handleCalculation = () => {
         elements.errorMessage.style.display = 'none';
         
@@ -452,11 +484,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const inputs = {
             lamaBudidaya: parseInt(elements.inputs.lamaBudidaya.value),
-            bobotAwal: parseFloat(elements.inputs.bobotAwal.value),
+            bobotAwal: parseFloat(elements.inputs.bobotAwalTebar.value),
             totalPakan: parseFloat(elements.inputs.totalPakan.value),
             bobotPanen: parseFloat(elements.inputs.bobotPanen.value),
             jumlahBibitAwal: parseInt(elements.inputs.jumlahBibitAwal.value),
             jumlahIkanPanen: parseInt(elements.inputs.jumlahIkanPanen.value),
+            bobotAwalType: elements.inputs.bobotAwalType.value,
+            bobotPanenType: elements.inputs.bobotPanenType.value,
         };
         
         const validationError = validateInputs(inputs);
@@ -466,10 +500,14 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        let totalBobotAwalGrams = inputs.bobotAwalType === 'total' ? inputs.bobotAwal * conversionFactor : inputs.bobotAwal * inputs.jumlahBibitAwal;
+        let totalBobotPanenGrams = inputs.bobotPanenType === 'total' ? inputs.bobotPanen * conversionFactor : inputs.bobotPanen * inputs.jumlahIkanPanen;
+        let totalPakanGrams = inputs.totalPakan * conversionFactor;
+
         const inputsInGrams = {
-            bobotAwal: inputs.bobotAwal * conversionFactor,
-            totalPakan: inputs.totalPakan * conversionFactor,
-            bobotPanen: inputs.bobotPanen * conversionFactor,
+            bobotAwal: totalBobotAwalGrams,
+            totalPakan: totalPakanGrams,
+            bobotPanen: totalBobotPanenGrams,
         };
 
         const results = calculateMetrics(inputsInGrams, inputs.jumlahBibitAwal, inputs.jumlahIkanPanen, inputs.lamaBudidaya);
@@ -481,7 +519,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateUI(results, unit, inputsInGrams.bobotPanen, inputs.jumlahIkanPanen, fishType);
     };
 
-    const validateInputs=(i)=>{if(Object.values(i).some(isNaN))return"Semua kolom harus diisi angka.";if(i.totalPakan<=0||i.jumlahBibitAwal<=0||i.lamaBudidaya<=0)return"Pakan, bibit awal, dan lama budidaya harus > 0.";if(i.bobotPanen<=i.bobotAwal)return"Bobot panen harus > bobot awal.";if(i.jumlahIkanPanen>i.jumlahBibitAwal)return"Ikan panen tidak boleh > bibit awal.";return null;};
+    const validateInputs=(i)=>{if(Object.values(i).some(val => typeof val === 'number' && isNaN(val)))return"Semua kolom harus diisi angka.";if(i.totalPakan<=0||i.jumlahBibitAwal<=0||i.lamaBudidaya<=0)return"Pakan, bibit awal, dan lama budidaya harus > 0.";if(i.jumlahIkanPanen > i.jumlahBibitAwal)return"Ikan panen tidak boleh > bibit awal.";return null;};
     
     const calculateMetrics=(weightInputs, bibitAwal, ikanPanen, lamaBudidaya)=>{
         const pB = weightInputs.bobotPanen - weightInputs.bobotAwal;
@@ -517,7 +555,6 @@ document.addEventListener('DOMContentLoaded', () => {
         elements.outputs.bobotRataPanen.textContent = `${r.bobotRataPanen.toFixed(2)} g/ekor`;
         elements.outputs.adg.textContent = `${r.adg.toFixed(2)} g/ekor/hari`;
         
-        // Auto-calculate recommendation on main calculation
         const avgWeightInGrams = totalBiomassInGrams / fishCount;
         const selectedSni = sniData[fishType];
         let feedPercentMin, feedPercentMax, percentText;
@@ -590,8 +627,14 @@ document.addEventListener('DOMContentLoaded', () => {
         elements.planningResultEl.style.display='block';
     };
 
+    elements.inputs.bobotAwalType.addEventListener('change', updateInputLabels);
+    elements.inputs.bobotPanenType.addEventListener('change', updateInputLabels);
+    elements.inputs.weightUnit.addEventListener('change', updateInputLabels);
     elements.calculateBtn.addEventListener('click', handleCalculation);
     elements.planBtn.addEventListener('click', handlePlanning);
+    
+    // Panggil sekali di awal untuk inisialisasi
+    updateInputLabels();
 });
 </script>
 
