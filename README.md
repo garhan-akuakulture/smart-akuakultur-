@@ -177,14 +177,14 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label for="weight_unit" class="block text-sm font-medium mb-1">Satuan Bobot (Total)</label>
-                        <select id="weight_unit" class="mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
+                        <select id="weight_unit" class="mt-1 block w-full px-3 py-3 rounded-md shadow-sm">
                             <option value="kg">Kilogram (kg)</option>
                             <option value="g">Gram (g)</option>
                         </select>
                     </div>
                     <div>
                         <label for="lama_budidaya" class="block text-sm font-medium mb-1">Lama Budidaya (hari)</label>
-                        <input type="number" id="lama_budidaya" placeholder="Contoh: 90" class="mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
+                        <input type="number" id="lama_budidaya" placeholder="Contoh: 90" class="mt-1 block w-full px-3 py-3 rounded-md shadow-sm">
                     </div>
                 </div>
                 <hr class="border-slate-700">
@@ -194,14 +194,14 @@
                     <h3 class="font-semibold text-slate-300">Data Bobot Awal</h3>
                     <div>
                         <label for="bobot_awal_type" class="block text-sm font-medium mb-1">Jenis Input</label>
-                        <select id="bobot_awal_type" class="mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
+                        <select id="bobot_awal_type" class="mt-1 block w-full px-3 py-3 rounded-md shadow-sm">
                             <option value="total">Total Bobot</option>
                             <option value="rata">Rata-rata Bobot</option>
                         </select>
                     </div>
                     <div>
                         <label id="label_bobot_awal" for="bobot_awal_tebar" class="flex items-center text-sm font-medium mb-1">Total Bobot Awal</label>
-                        <input type="number" id="bobot_awal_tebar" placeholder="Contoh: 10" class="mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
+                        <input type="number" id="bobot_awal_tebar" placeholder="Contoh: 10" class="mt-1 block w-full px-3 py-3 rounded-md shadow-sm">
                     </div>
                 </div>
 
@@ -210,21 +210,21 @@
                     <h3 class="font-semibold text-slate-300">Data Bobot Panen</h3>
                     <div>
                         <label for="bobot_panen_type" class="block text-sm font-medium mb-1">Jenis Input</label>
-                        <select id="bobot_panen_type" class="mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
+                        <select id="bobot_panen_type" class="mt-1 block w-full px-3 py-3 rounded-md shadow-sm">
                             <option value="total">Total Bobot</option>
                             <option value="rata">Rata-rata Bobot</option>
                         </select>
                     </div>
                     <div>
                         <label id="label_bobot_panen" for="bobot_panen" class="flex items-center text-sm font-medium mb-1">Total Bobot Panen</label>
-                        <input type="number" id="bobot_panen" placeholder="Contoh: 110" class="mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
+                        <input type="number" id="bobot_panen" placeholder="Contoh: 110" class="mt-1 block w-full px-3 py-3 rounded-md shadow-sm">
                     </div>
                 </div>
 
                 <!-- INPUT PAKAN -->
                 <div>
                     <label for="total_pakan" class="flex items-center text-sm font-medium mb-1">Total Pakan Dihabiskan</label>
-                    <input type="number" id="total_pakan" placeholder="Contoh: 120" class="mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
+                    <input type="number" id="total_pakan" placeholder="Contoh: 120" class="mt-1 block w-full px-3 py-3 rounded-md shadow-sm">
                 </div>
 
                 <hr class="border-slate-700">
@@ -232,11 +232,11 @@
                 <!-- KELOMPOK JUMLAH IKAN -->
                 <div>
                     <label for="jumlah_bibit_awal" class="flex items-center text-sm font-medium mb-1">Jumlah Bibit Awal (ekor)</label>
-                    <input type="number" id="jumlah_bibit_awal" placeholder="Contoh: 1000" class="mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
+                    <input type="number" id="jumlah_bibit_awal" placeholder="Contoh: 1000" class="mt-1 block w-full px-3 py-3 rounded-md shadow-sm">
                 </div>
                 <div>
                     <label for="jumlah_ikan_panen" class="flex items-center text-sm font-medium mb-1">Jumlah Ikan Panen (ekor)</label>
-                    <input type="number" id="jumlah_ikan_panen" placeholder="Contoh: 950" class="mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
+                    <input type="number" id="jumlah_ikan_panen" placeholder="Contoh: 950" class="mt-1 block w-full px-3 py-3 rounded-md shadow-sm">
                 </div>
             </div>
             <button id="calculate-btn" class="main-button mt-8 w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 transform hover:scale-105">
@@ -308,7 +308,7 @@
                 <div class="mt-6">
                     <label for="target_fcr" class="block text-sm font-medium mb-1">Perencanaan Target FCR (setelah panen)</label>
                     <div class="flex space-x-2 mt-1">
-                        <input type="number" id="target_fcr" value="1.2" step="0.1" class="block w-full px-3 py-2 rounded-md shadow-sm">
+                        <input type="number" id="target_fcr" value="1.2" step="0.1" class="block w-full px-3 py-3 rounded-md shadow-sm">
                         <button id="plan-btn" class="px-4 py-2 bg-slate-600 text-white font-semibold rounded-lg hover:bg-slate-700 transition-colors">Rencanakan</button>
                     </div>
                 </div>
