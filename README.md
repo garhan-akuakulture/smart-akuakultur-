@@ -97,11 +97,10 @@
             position: relative;
             overflow: hidden;
             aspect-ratio: 1 / 1;
-        }
-        .fish-option img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            background-color: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .fish-option:hover {
             transform: scale(1.05);
@@ -150,27 +149,27 @@
                     <label class="block text-sm font-medium mb-2">Pilih Jenis Ikan</label>
                     <div id="fish-selection-container" class="grid grid-cols-3 sm:grid-cols-6 gap-4">
                         <div class="fish-option selected" data-fish="lele">
-                            <img src="https://i.ibb.co/6r6c3yG/lele.png" alt="Ikan Lele">
+                            <svg class="w-full h-full p-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 6c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /><path d="M3 12c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /><path d="M3 18c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /></svg>
                             <div class="fish-name">Lele</div>
                         </div>
                         <div class="fish-option" data-fish="nila">
-                            <img src="https://i.ibb.co/yQxGzV9/nila.png" alt="Ikan Nila">
+                            <svg class="w-full h-full p-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 6c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /><path d="M3 12c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /><path d="M3 18c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /></svg>
                             <div class="fish-name">Nila</div>
                         </div>
                         <div class="fish-option" data-fish="gurame">
-                            <img src="https://i.ibb.co/z5Y0d8d/gurame.png" alt="Ikan Gurame">
+                            <svg class="w-full h-full p-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 6c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /><path d="M3 12c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /><path d="M3 18c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /></svg>
                             <div class="fish-name">Gurame</div>
                         </div>
                         <div class="fish-option" data-fish="mas">
-                            <img src="https://i.ibb.co/z7yM5Yg/mas.png" alt="Ikan Mas">
+                            <svg class="w-full h-full p-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 6c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /><path d="M3 12c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /><path d="M3 18c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /></svg>
                             <div class="fish-name">Mas</div>
                         </div>
                         <div class="fish-option" data-fish="patin">
-                            <img src="https://i.ibb.co/8Mv9X0z/patin.png" alt="Ikan Patin">
+                            <svg class="w-full h-full p-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 6c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /><path d="M3 12c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /><path d="M3 18c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /></svg>
                             <div class="fish-name">Patin</div>
                         </div>
                         <div class="fish-option" data-fish="bawal">
-                            <img src="https://i.ibb.co/hZ5fHwN/bawal.png" alt="Ikan Bawal">
+                           <svg class="w-full h-full p-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 6c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /><path d="M3 12c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /><path d="M3 18c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /></svg>
                             <div class="fish-name">Bawal</div>
                         </div>
                     </div>
@@ -642,7 +641,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (statusSrEl) statusSrEl.innerHTML = '';
 
         if(r.fcr>0&&r.fcr<1.0)displayStatus(statusFcrEl,'🟢 FCR Sangat Efisien','#dcfce7','#166534');
-        else if(r.fcr<=1.2)displayStatus(statusFcrEl,'🔵 FCR Efisien','#dbeafe','#1e40af');
+        else if(r.fcr<=1.2)displayStatus(statusFcrEl,'� FCR Efisien','#dbeafe','#1e40af');
         else if(r.fcr<=1.5)displayStatus(statusFcrEl,'🟡 FCR Cukup Efisien','#fef9c3','#854d0e');
         else displayStatus(statusFcrEl,'🔴 FCR Kurang Efisien','#fee2e2','#991b1b');
         
@@ -702,3 +701,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
+�
