@@ -88,6 +88,41 @@
             font-weight: 600; 
             font-size: 0.875rem;
         }
+        /* Gaya untuk pemilihan ikan */
+        .fish-option {
+            border: 3px solid transparent;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 1 / 1;
+        }
+        .fish-option img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .fish-option:hover {
+            transform: scale(1.05);
+            border-color: #818cf8; /* indigo-400 */
+        }
+        .fish-option.selected {
+            border-color: #6366f1; /* indigo-500 */
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+        }
+        .fish-option .fish-name {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            text-align: center;
+            padding: 4px 0;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -112,15 +147,33 @@
             </h2>
             <div class="space-y-5">
                 <div>
-                    <label for="fish_type" class="block text-sm font-medium mb-1">Pilih Jenis Ikan</label>
-                    <select id="fish_type" class="mt-1 block w-full px-3 py-2 rounded-md shadow-sm">
-                        <option value="lele">Lele</option>
-                        <option value="nila">Nila</option>
-                        <option value="gurame">Gurame</option>
-                        <option value="mas">Ikan Mas</option>
-                        <option value="patin">Patin</option>
-                        <option value="bawal">Bawal</option>
-                    </select>
+                    <label class="block text-sm font-medium mb-2">Pilih Jenis Ikan</label>
+                    <div id="fish-selection-container" class="grid grid-cols-3 sm:grid-cols-6 gap-4">
+                        <div class="fish-option selected" data-fish="lele">
+                            <img src="https://i.ibb.co/6r6c3yG/lele.png" alt="Ikan Lele">
+                            <div class="fish-name">Lele</div>
+                        </div>
+                        <div class="fish-option" data-fish="nila">
+                            <img src="https://i.ibb.co/yQxGzV9/nila.png" alt="Ikan Nila">
+                            <div class="fish-name">Nila</div>
+                        </div>
+                        <div class="fish-option" data-fish="gurame">
+                            <img src="https://i.ibb.co/z5Y0d8d/gurame.png" alt="Ikan Gurame">
+                            <div class="fish-name">Gurame</div>
+                        </div>
+                        <div class="fish-option" data-fish="mas">
+                            <img src="https://i.ibb.co/z7yM5Yg/mas.png" alt="Ikan Mas">
+                            <div class="fish-name">Mas</div>
+                        </div>
+                        <div class="fish-option" data-fish="patin">
+                            <img src="https://i.ibb.co/8Mv9X0z/patin.png" alt="Ikan Patin">
+                            <div class="fish-name">Patin</div>
+                        </div>
+                        <div class="fish-option" data-fish="bawal">
+                            <img src="https://i.ibb.co/hZ5fHwN/bawal.png" alt="Ikan Bawal">
+                            <div class="fish-name">Bawal</div>
+                        </div>
+                    </div>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
@@ -421,8 +474,8 @@ document.addEventListener('DOMContentLoaded', () => {
         resultContainer: document.getElementById('result-container'),
         errorMessage: document.getElementById('error-message'),
         planningResultEl: document.getElementById('planning-result'),
+        fishSelectionContainer: document.getElementById('fish-selection-container'),
         inputs: {
-            fishType: document.getElementById('fish_type'),
             weightUnit: document.getElementById('weight_unit'),
             lamaBudidaya: document.getElementById('lama_budidaya'), 
             bobotAwalTebar: document.getElementById('bobot_awal_tebar'),
@@ -452,7 +505,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const appState = { 
         pertambahanBobot: 0,
         totalPakan: 0,
-        unit: 'kg'
+        unit: 'kg',
+        selectedFish: 'lele' // Default fish
     };
     
     function updateInputLabels() {
@@ -479,7 +533,7 @@ document.addEventListener('DOMContentLoaded', () => {
         elements.errorMessage.style.display = 'none';
         
         const unit = elements.inputs.weightUnit.value;
-        const fishType = elements.inputs.fishType.value;
+        const fishType = appState.selectedFish;
         const conversionFactor = unit === 'kg' ? 1000 : 1;
 
         const inputs = {
@@ -627,13 +681,21 @@ document.addEventListener('DOMContentLoaded', () => {
         elements.planningResultEl.style.display='block';
     };
 
+    elements.fishSelectionContainer.addEventListener('click', (e) => {
+        const selected = e.target.closest('.fish-option');
+        if (!selected) return;
+
+        document.querySelectorAll('.fish-option').forEach(el => el.classList.remove('selected'));
+        selected.classList.add('selected');
+        appState.selectedFish = selected.dataset.fish;
+    });
+
     elements.inputs.bobotAwalType.addEventListener('change', updateInputLabels);
     elements.inputs.bobotPanenType.addEventListener('change', updateInputLabels);
     elements.inputs.weightUnit.addEventListener('change', updateInputLabels);
     elements.calculateBtn.addEventListener('click', handleCalculation);
     elements.planBtn.addEventListener('click', handlePlanning);
     
-    // Panggil sekali di awal untuk inisialisasi
     updateInputLabels();
 });
 </script>
