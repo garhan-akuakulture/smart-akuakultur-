@@ -149,27 +149,27 @@
                     <label class="block text-sm font-medium mb-2">Pilih Jenis Ikan</label>
                     <div id="fish-selection-container" class="grid grid-cols-3 sm:grid-cols-6 gap-4">
                         <div class="fish-option selected" data-fish="lele">
-                            <svg class="w-full h-full p-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 6c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /><path d="M3 12c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /><path d="M3 18c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /></svg>
+                            <svg class="w-full h-full p-3 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /><path d="M3 12c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /><path d="M3 18c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /></svg>
                             <div class="fish-name">Lele</div>
                         </div>
                         <div class="fish-option" data-fish="nila">
-                            <svg class="w-full h-full p-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 6c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /><path d="M3 12c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /><path d="M3 18c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /></svg>
+                            <svg class="w-full h-full p-3 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /><path d="M3 12c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /><path d="M3 18c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /></svg>
                             <div class="fish-name">Nila</div>
                         </div>
                         <div class="fish-option" data-fish="gurame">
-                            <svg class="w-full h-full p-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 6c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /><path d="M3 12c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /><path d="M3 18c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /></svg>
+                            <svg class="w-full h-full p-3 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /><path d="M3 12c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /><path d="M3 18c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /></svg>
                             <div class="fish-name">Gurame</div>
                         </div>
                         <div class="fish-option" data-fish="mas">
-                            <svg class="w-full h-full p-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 6c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /><path d="M3 12c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /><path d="M3 18c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /></svg>
+                            <svg class="w-full h-full p-3 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /><path d="M3 12c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /><path d="M3 18c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /></svg>
                             <div class="fish-name">Mas</div>
                         </div>
                         <div class="fish-option" data-fish="patin">
-                            <svg class="w-full h-full p-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 6c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /><path d="M3 12c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /><path d="M3 18c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /></svg>
+                            <svg class="w-full h-full p-3 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /><path d="M3 12c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /><path d="M3 18c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /></svg>
                             <div class="fish-name">Patin</div>
                         </div>
                         <div class="fish-option" data-fish="bawal">
-                           <svg class="w-full h-full p-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 6c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /><path d="M3 12c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /><path d="M3 18c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /></svg>
+                           <svg class="w-full h-full p-3 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /><path d="M3 12c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /><path d="M3 18c3 1.5 6 1.5 9 0 3-1.5 6-1.5 9 0" /></svg>
                             <div class="fish-name">Bawal</div>
                         </div>
                     </div>
@@ -643,7 +643,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if(r.fcr>0&&r.fcr<1.0)displayStatus(statusFcrEl,'🟢 FCR Sangat Efisien','#dcfce7','#166534');
         else if(r.fcr<=1.2)displayStatus(statusFcrEl,'🔵 FCR Efisien','#dbeafe','#1e40af');
         else if(r.fcr<=1.5)displayStatus(statusFcrEl,'🟡 FCR Cukup Efisien','#fef9c3','#854d0e');
-        else displayStatus(statusFcrEl,'� FCR Kurang Efisien','#fee2e2','#991b1b');
+        else displayStatus(statusFcrEl,'🔴 FCR Kurang Efisien','#fee2e2','#991b1b');
         
         if(r.sr>=80)displayStatus(statusSrEl,'✅ SR Berhasil (di atas 80%)','#dcfce7','#166534');
         else displayStatus(statusSrEl,'⚠️ SR Perlu Evaluasi (di bawah 80%)','#fef9c3','#854d0e');
@@ -701,4 +701,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
-�
