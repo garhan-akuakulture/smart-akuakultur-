@@ -641,9 +641,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (statusSrEl) statusSrEl.innerHTML = '';
 
         if(r.fcr>0&&r.fcr<1.0)displayStatus(statusFcrEl,'🟢 FCR Sangat Efisien','#dcfce7','#166534');
-        else if(r.fcr<=1.2)displayStatus(statusFcrEl,'� FCR Efisien','#dbeafe','#1e40af');
+        else if(r.fcr<=1.2)displayStatus(statusFcrEl,'🔵 FCR Efisien','#dbeafe','#1e40af');
         else if(r.fcr<=1.5)displayStatus(statusFcrEl,'🟡 FCR Cukup Efisien','#fef9c3','#854d0e');
-        else displayStatus(statusFcrEl,'🔴 FCR Kurang Efisien','#fee2e2','#991b1b');
+        else displayStatus(statusFcrEl,'� FCR Kurang Efisien','#fee2e2','#991b1b');
         
         if(r.sr>=80)displayStatus(statusSrEl,'✅ SR Berhasil (di atas 80%)','#dcfce7','#166534');
         else displayStatus(statusSrEl,'⚠️ SR Perlu Evaluasi (di bawah 80%)','#fef9c3','#854d0e');
