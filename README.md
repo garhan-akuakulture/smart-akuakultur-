@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Akuakultur Sistem by Tegar</title>
+    <title>Smart Aquaqulture System</title>
     <!-- Memuat Tailwind CSS dari CDN, cara ini kompatibel dengan GitHub Pages -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -30,7 +30,7 @@
             background-color: rgba(15, 23, 42, 0.75); /* Latar belakang semi-transparan lebih gelap */
             backdrop-filter: blur(12px); /* Efek blur untuk tampilan modern */
             -webkit-backdrop-filter: blur(12px);
-            border-radius: 0.75rem; 
+            border-radius: 1rem; 
             padding: 2rem; 
             box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
             transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
@@ -38,8 +38,8 @@
         }
         .card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.3);
+            border-color: rgba(99, 102, 241, 0.5);
         }
         .main-button {
             display: flex;
@@ -131,7 +131,7 @@
 <canvas id="fishery-bg"></canvas>
 <div class="main-content max-w-3xl mx-auto">
     <div class="text-center mb-10">
-        <h1 class="text-4xl md:text-5xl font-extrabold text-white">Smart Akuakultur Sistem</h1>
+        <h1 class="text-4xl md:text-5xl font-extrabold text-white">Smart Aquaqulture System</h1>
         <p class="text-lg text-slate-400 mt-2">by Tegar</p>
     </div>
     
@@ -176,7 +176,7 @@
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label for="weight_unit" class="block text-sm font-medium mb-1">Satuan Bobot (Total)</label>
+                        <label for="weight_unit" class="block text-sm font-medium mb-1">Satuan Bobot</label>
                         <select id="weight_unit" class="mt-1 block w-full px-3 py-3 rounded-md shadow-sm">
                             <option value="kg">Kilogram (kg)</option>
                             <option value="g">Gram (g)</option>
@@ -223,7 +223,7 @@
 
                 <!-- INPUT PAKAN -->
                 <div>
-                    <label for="total_pakan" class="flex items-center text-sm font-medium mb-1">Total Pakan Dihabiskan</label>
+                    <label id="label_total_pakan" for="total_pakan" class="flex items-center text-sm font-medium mb-1">Total Pakan Dihabiskan</label>
                     <input type="number" id="total_pakan" placeholder="Contoh: 120" class="mt-1 block w-full px-3 py-3 rounded-md shadow-sm">
                 </div>
 
@@ -253,38 +253,14 @@
                     Hasil Analisis
                 </h2>
                 <div class="mt-4 space-y-2">
-                    <div class="result-item">
-                        <span>Pertambahan Bobot</span>
-                        <span id="hasil-pertambahan-bobot" class="font-bold text-lg"></span>
-                    </div>
-                    <div class="result-item">
-                        <span>Rasio Konversi Pakan (FCR)</span>
-                        <span id="hasil-fcr" class="font-bold text-lg"></span>
-                    </div>
-                    <div class="result-item">
-                        <span>Efisiensi Pakan (EP)</span>
-                        <span id="hasil-ep" class="font-bold text-lg"></span>
-                    </div>
-                    <div class="result-item">
-                        <span>Survival Rate (SR)</span>
-                        <span id="hasil-sr" class="font-bold text-lg"></span>
-                    </div>
-                    <div class="result-item">
-                        <span>Specific Growth Rate (SGR)</span>
-                        <span id="hasil-sgr" class="font-bold text-lg"></span>
-                    </div>
-                    <div class="result-item">
-                        <span>Pertumbuhan Rata-rata</span>
-                        <span id="hasil-pertumbuhan-rata" class="font-bold text-lg"></span>
-                    </div>
-                    <div class="result-item">
-                        <span>Bobot Rata-rata Panen</span>
-                        <span id="hasil-bobot-rata-panen" class="font-bold text-lg"></span>
-                    </div>
-                    <div class="result-item">
-                        <span>Pertumbuhan Harian (ADG)</span>
-                        <span id="hasil-adg" class="font-bold text-lg"></span>
-                    </div>
+                    <div class="result-item"><span>Pertambahan Bobot</span><span id="hasil-pertambahan-bobot" class="font-bold text-lg"></span></div>
+                    <div class="result-item"><span>Rasio Konversi Pakan (FCR)</span><span id="hasil-fcr" class="font-bold text-lg"></span></div>
+                    <div class="result-item"><span>Efisiensi Pakan (EP)</span><span id="hasil-ep" class="font-bold text-lg"></span></div>
+                    <div class="result-item"><span>Survival Rate (SR)</span><span id="hasil-sr" class="font-bold text-lg"></span></div>
+                    <div class="result-item"><span>Specific Growth Rate (SGR)</span><span id="hasil-sgr" class="font-bold text-lg"></span></div>
+                    <div class="result-item"><span>Pertumbuhan Rata-rata</span><span id="hasil-pertumbuhan-rata" class="font-bold text-lg"></span></div>
+                    <div class="result-item"><span>Bobot Rata-rata Panen</span><span id="hasil-bobot-rata-panen" class="font-bold text-lg"></span></div>
+                    <div class="result-item"><span>Pertumbuhan Harian (ADG)</span><span id="hasil-adg" class="font-bold text-lg"></span></div>
                 </div>
                 <div id="status-fcr" class="mt-6 text-center"></div>
                 <div id="status-sr" class="mt-2 text-center"></div>
@@ -318,7 +294,7 @@
     </div>
     <div id="error-message" class="mt-6 text-center text-red-400 font-semibold p-4 bg-red-500/10 rounded-lg" style="display: none;"></div>
     <footer class="text-center mt-12 text-sm text-slate-500">
-        <p>&copy; 2025 Smart Akuakultur Sistem by Tegar.</p>
+        <p>&copy; 2025 Smart Aquaqulture System by Tegar.</p>
         <p class="mt-1">Kontak: <a href="mailto:tegarraihan211204@gmail.com" class="text-indigo-400 hover:underline">tegarraihan211204@gmail.com</a></p>
     </footer>
 </div>
@@ -489,6 +465,7 @@ document.addEventListener('DOMContentLoaded', () => {
         labels: {
             bobotAwal: document.getElementById('label_bobot_awal'),
             bobotPanen: document.getElementById('label_bobot_panen'),
+            totalPakan: document.getElementById('label_total_pakan'),
         },
         outputs: {
             pertambahanBobot: document.getElementById('hasil-pertambahan-bobot'),
@@ -526,6 +503,8 @@ document.addEventListener('DOMContentLoaded', () => {
             elements.labels.bobotPanen.textContent = 'Rata-rata Bobot Panen (g/ekor)';
             elements.inputs.bobotPanen.placeholder = `Contoh: 120`;
         }
+        
+        elements.labels.totalPakan.textContent = `Total Pakan Dihabiskan (${unit})`;
     }
 
     const handleCalculation = () => {
